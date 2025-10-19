@@ -14,7 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
-
     <style>
         :root {
             --primary-color: #5636D3; --secondary-color: #FF872C; --success-color: #12A454;
@@ -124,6 +123,28 @@
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999; }
         .sidebar-overlay.active { display: block; }
         
+        /* --- Novos estilos para as funcionalidades adicionadas --- */
+        .transaction-type-selector { display: flex; gap: 10px; margin-bottom: 1rem; }
+        .transaction-type-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f8f9fa; cursor: pointer; text-align: center; transition: all 0.3s ease; }
+        .transaction-type-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .transaction-type-btn.income.active { background-color: var(--success-color); border-color: var(--success-color); }
+        .transaction-type-btn.expense.active { background-color: var(--danger-color); border-color: var(--danger-color); }
+        
+        .dashboard-filters { background-color: var(--card-bg-color); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; box-shadow: var(--box-shadow); }
+        .dashboard-filters .form-control { flex-grow: 1; min-width: 200px; }
+        .dashboard-filters label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .dashboard-filters input, .dashboard-filters select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        
+        .insights-section { background-color: var(--card-bg-color); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; box-shadow: var(--box-shadow); }
+        .insights-section h3 { margin-bottom: 1rem; color: var(--primary-color); }
+        .insight-item { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
+        .insight-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .insight-title { font-weight: 600; margin-bottom: 0.5rem; }
+        .insight-description { font-size: 0.9rem; color: var(--text-light-color); }
+        .insight-positive { border-left: 4px solid var(--success-color); padding-left: 1rem; }
+        .insight-warning { border-left: 4px solid var(--secondary-color); padding-left: 1rem; }
+        .insight-danger { border-left: 4px solid var(--danger-color); padding-left: 1rem; }
+        
         /* --- Responsividade --- */
         @media (max-width: 768px) {
             .sidebar { transform: translateX(-100%); }
@@ -136,6 +157,8 @@
             .fab { right: 1.5rem; bottom: 1.5rem; }
             .list-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
             .list-item-actions { width: 100%; justify-content: flex-end; }
+            .transaction-type-selector { flex-direction: column; }
+            .dashboard-filters { flex-direction: column; }
         }
 
     </style>
@@ -163,11 +186,52 @@
 
         <section id="dashboard-page" class="page-content active">
             <header><h2>Dashboard</h2></header>
+            
+            <!-- Filtros e busca adicionados -->
+            <div class="dashboard-filters">
+                <div class="form-control">
+                    <label for="search-transactions">Buscar transações</label>
+                    <input type="text" id="search-transactions" placeholder="Descrição, categoria...">
+                </div>
+                <div class="form-control">
+                    <label for="filter-type">Tipo</label>
+                    <select id="filter-type">
+                        <option value="all">Todos</option>
+                        <option value="income">Receitas</option>
+                        <option value="expense">Despesas</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="filter-category">Categoria</label>
+                    <select id="filter-category">
+                        <option value="all">Todas</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="filter-date">Período</label>
+                    <select id="filter-date">
+                        <option value="all">Todo período</option>
+                        <option value="current-month">Mês atual</option>
+                        <option value="last-month">Mês anterior</option>
+                        <option value="last-3-months">Últimos 3 meses</option>
+                    </select>
+                </div>
+            </div>
+            
             <div id="dashboard-cards">
                 <div class="card balance"><div class="card-header"><span>Saldo Geral</span><i class="fa-solid fa-dollar-sign"></i></div><p id="balance-display">R$ 0,00</p></div>
                 <div class="card income"><div class="card-header"><span>Receitas do Mês</span><i class="fa-solid fa-arrow-up"></i></div><p id="income-display">R$ 0,00</p></div>
                 <div class="card expense"><div class="card-header"><span>Despesas do Mês</span><i class="fa-solid fa-arrow-down"></i></div><p id="expense-display">R$ 0,00</p></div>
             </div>
+            
+            <!-- Seção de Insights Inteligentes -->
+            <div class="insights-section">
+                <h3><i class="fa-solid fa-lightbulb"></i> Insights Financeiros</h3>
+                <div id="financial-insights">
+                    <!-- Os insights serão gerados dinamicamente pelo JavaScript -->
+                </div>
+            </div>
+            
             <div id="account-balances">
                 <h3>Saldo das Contas</h3>
                 <div id="account-balances-list"></div>
@@ -218,9 +282,15 @@
         <div class="modal-content">
             <h3>Nova Transação</h3>
             <form id="transaction-form">
+                <!-- Seletor de tipo de transação adicionado -->
+                <div class="transaction-type-selector">
+                    <div class="transaction-type-btn income active" data-type="income">Receita</div>
+                    <div class="transaction-type-btn expense" data-type="expense">Despesa</div>
+                </div>
+                
                 <div class="form-control"><label for="description">Descrição</label><input type="text" id="description" required></div>
                 <div class="form-grid">
-                    <div class="form-control"><label for="amount">Valor</label><input type="number" id="amount" placeholder="Ex: -50,00 ou 1500,00" step="0.01" required></div>
+                    <div class="form-control"><label for="amount">Valor</label><input type="number" id="amount" placeholder="Ex: 1500,00" step="0.01" required></div>
                     <div class="form-control"><label for="date">Data</label><input type="date" id="date" required></div>
                 </div>
                 <div class="form-grid">
@@ -238,9 +308,16 @@
             <h3>Detalhes da Transação</h3>
             <form id="edit-transaction-form">
                 <input type="hidden" id="edit-transaction-id">
+                
+                <!-- Seletor de tipo de transação adicionado -->
+                <div class="transaction-type-selector">
+                    <div class="transaction-type-btn income" data-type="income">Receita</div>
+                    <div class="transaction-type-btn expense" data-type="expense">Despesa</div>
+                </div>
+                
                 <div class="form-control"><label for="edit-description">Descrição</label><input type="text" id="edit-description" required></div>
                 <div class="form-grid">
-                    <div class="form-control"><label for="edit-amount">Valor</label><input type="number" id="edit-amount" placeholder="Ex: -50,00 ou 1500,00" step="0.01" required></div>
+                    <div class="form-control"><label for="edit-amount">Valor</label><input type="number" id="edit-amount" placeholder="Ex: 1500,00" step="0.01" required></div>
                     <div class="form-control"><label for="edit-date">Data</label><input type="date" id="edit-date" required></div>
                 </div>
                 <div class="form-grid">
@@ -335,265 +412,730 @@
             return (account.initialBalance || 0) + totalTransactions;
         };
 
+        // Função para filtrar transações baseadas nos filtros do dashboard
+        const getFilteredTransactions = () => {
+            const searchTerm = document.getElementById('search-transactions').value.toLowerCase();
+            const typeFilter = document.getElementById('filter-type').value;
+            const categoryFilter = document.getElementById('filter-category').value;
+            const dateFilter = document.getElementById('filter-date').value;
+            
+            let filtered = [...state.transactions];
+            
+            // Filtro por busca
+            if (searchTerm) {
+                filtered = filtered.filter(t => {
+                    const category = state.categories.find(c => c.id === t.categoryId)?.name || '';
+                    return t.description.toLowerCase().includes(searchTerm) || 
+                           category.toLowerCase().includes(searchTerm);
+                });
+            }
+            
+            // Filtro por tipo
+            if (typeFilter !== 'all') {
+                filtered = filtered.filter(t => {
+                    if (typeFilter === 'income') return t.amount > 0;
+                    if (typeFilter === 'expense') return t.amount < 0;
+                    return true;
+                });
+            }
+            
+            // Filtro por categoria
+            if (categoryFilter !== 'all') {
+                filtered = filtered.filter(t => t.categoryId === parseInt(categoryFilter));
+            }
+            
+            // Filtro por período
+            if (dateFilter !== 'all') {
+                const now = new Date();
+                filtered = filtered.filter(t => {
+                    const tDate = new Date(t.date);
+                    
+                    switch(dateFilter) {
+                        case 'current-month':
+                            return tDate.getMonth() === now.getMonth() && 
+                                   tDate.getFullYear() === now.getFullYear();
+                        case 'last-month':
+                            const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+                            const year = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
+                            return tDate.getMonth() === lastMonth && 
+                                   tDate.getFullYear() === year;
+                        case 'last-3-months':
+                            const threeMonthsAgo = new Date();
+                            threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                            return tDate >= threeMonthsAgo;
+                        default:
+                            return true;
+                    }
+                });
+            }
+            
+            return filtered;
+        };
+
+        // Função para gerar insights financeiros
+        const generateFinancialInsights = () => {
+            const insightsContainer = document.getElementById('financial-insights');
+            if (!insightsContainer) return;
+            
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            // Transações do mês atual
+            const currentMonthTransactions = state.transactions.filter(t => {
+                const tDate = new Date(t.date);
+                return t.status === 'completed' && 
+                       tDate.getMonth() === currentMonth && 
+                       tDate.getFullYear() === currentYear;
+            });
+            
+            // Transações do mês anterior
+            const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+            const lastMonthTransactions = state.transactions.filter(t => {
+                const tDate = new Date(t.date);
+                return t.status === 'completed' && 
+                       tDate.getMonth() === lastMonth && 
+                       tDate.getFullYear() === lastMonthYear;
+            });
+            
+            // Cálculos para o mês atual
+            const currentMonthIncome = currentMonthTransactions
+                .filter(t => t.amount > 0)
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const currentMonthExpenses = currentMonthTransactions
+                .filter(t => t.amount < 0)
+                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                
+            const currentMonthBalance = currentMonthIncome - currentMonthExpenses;
+            
+            // Cálculos para o mês anterior
+            const lastMonthIncome = lastMonthTransactions
+                .filter(t => t.amount > 0)
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const lastMonthExpenses = lastMonthTransactions
+                .filter(t => t.amount < 0)
+                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                
+            const lastMonthBalance = lastMonthIncome - lastMonthExpenses;
+            
+            // Análise por categoria
+            const categoryExpenses = {};
+            currentMonthTransactions
+                .filter(t => t.amount < 0)
+                .forEach(t => {
+                    const category = state.categories.find(c => c.id === t.categoryId)?.name || 'Outros';
+                    categoryExpenses[category] = (categoryExpenses[category] || 0) + Math.abs(t.amount);
+                });
+            
+            // Encontrar a categoria com maior gasto
+            const highestExpenseCategory = Object.keys(categoryExpenses).length > 0 ? 
+                Object.keys(categoryExpenses).reduce((a, b) => categoryExpenses[a] > categoryExpenses[b] ? a : b) : null;
+            
+            // Gerar insights
+            const insights = [];
+            
+            // Insight 1: Comparação com o mês anterior
+            if (lastMonthIncome > 0) {
+                const incomeChange = ((currentMonthIncome - lastMonthIncome) / lastMonthIncome * 100).toFixed(1);
+                if (Math.abs(incomeChange) > 5) {
+                    insights.push({
+                        title: incomeChange > 0 ? 'Receitas em Crescimento' : 'Atenção às Receitas',
+                        description: incomeChange > 0 ? 
+                            `Suas receitas aumentaram ${incomeChange}% em relação ao mês anterior. Continue assim!` :
+                            `Suas receitas diminuíram ${Math.abs(incomeChange)}% em relação ao mês anterior. Considere revisar suas fontes de renda.`,
+                        type: incomeChange > 0 ? 'positive' : 'warning'
+                    });
+                }
+            }
+            
+            // Insight 2: Controle de gastos
+            if (currentMonthExpenses > 0) {
+                const expenseToIncomeRatio = (currentMonthExpenses / currentMonthIncome * 100).toFixed(1);
+                if (expenseToIncomeRatio > 80) {
+                    insights.push({
+                        title: 'Alerta de Gastos Elevados',
+                        description: `Seus gastos representam ${expenseToIncomeRatio}% da sua receita. Considere reduzir despesas para melhorar sua saúde financeira.`,
+                        type: 'danger'
+                    });
+                } else if (expenseToIncomeRatio < 50) {
+                    insights.push({
+                        title: 'Bom Controle de Gastos',
+                        description: `Seus gastos representam apenas ${expenseToIncomeRatio}% da sua receita. Excelente controle financeiro!`,
+                        type: 'positive'
+                    });
+                }
+            }
+            
+            // Insight 3: Categoria com maior gasto
+            if (highestExpenseCategory) {
+                const highestExpenseAmount = categoryExpenses[highestExpenseCategory];
+                insights.push({
+                    title: 'Maior Gasto por Categoria',
+                    description: `Sua maior despesa foi em "${highestExpenseCategory}" com ${formatCurrency(highestExpenseAmount)}. Considere revisar gastos nesta categoria.`,
+                    type: highestExpenseAmount > (currentMonthIncome * 0.3) ? 'warning' : 'positive'
+                });
+            }
+            
+            // Insight 4: Saldo do mês
+            if (currentMonthBalance < 0) {
+                insights.push({
+                    title: 'Saldo Negativo',
+                    description: `Seu saldo este mês é negativo (${formatCurrency(currentMonthBalance)}). É importante ajustar suas finanças para evitar endividamento.`,
+                    type: 'danger'
+                });
+            } else if (currentMonthBalance > (currentMonthIncome * 0.2)) {
+                insights.push({
+                    title: 'Boa Capacidade de Poupança',
+                    description: `Você está poupando ${formatCurrency(currentMonthBalance)} este mês, o que representa uma boa taxa de economia.`,
+                    type: 'positive'
+                });
+            }
+            
+            // Insight 5: Dicas de otimização
+            if (currentMonthIncome > 0 && currentMonthExpenses > 0) {
+                const potentialSavings = currentMonthExpenses * 0.1; // 10% de economia potencial
+                insights.push({
+                    title: 'Oportunidade de Economia',
+                    description: `Reduzindo apenas 10% dos seus gastos, você poderia economizar ${formatCurrency(potentialSavings)} por mês.`,
+                    type: 'warning'
+                });
+            }
+            
+            // Renderizar insights
+            insightsContainer.innerHTML = '';
+            if (insights.length === 0) {
+                insightsContainer.innerHTML = '<p>Não há dados suficientes para gerar insights. Continue registrando suas transações.</p>';
+            } else {
+                insights.forEach(insight => {
+                    const insightEl = document.createElement('div');
+                    insightEl.className = `insight-item insight-${insight.type}`;
+                    insightEl.innerHTML = `
+                        <div class="insight-title">${insight.title}</div>
+                        <div class="insight-description">${insight.description}</div>
+                    `;
+                    insightsContainer.appendChild(insightEl);
+                });
+            }
+        };
+
         const renderDashboard = () => {
             const now = new Date();
-            const monthlyTrans = state.transactions.filter(t => {
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            const currentMonthTransactions = state.transactions.filter(t => {
                 const tDate = new Date(t.date);
-                return t.status === 'completed' && tDate.getMonth() === now.getMonth() && tDate.getFullYear() === now.getFullYear();
+                return t.status === 'completed' && 
+                       tDate.getMonth() === currentMonth && 
+                       tDate.getFullYear() === currentYear;
             });
-            const monthlyIncome = monthlyTrans.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
-            const monthlyExpense = monthlyTrans.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0);
-            const totalBalance = state.accounts.reduce((sum, acc) => sum + getAccountBalance(acc.id), 0);
-
-            document.getElementById('balance-display').textContent = formatCurrency(totalBalance);
-            document.getElementById('income-display').textContent = formatCurrency(monthlyIncome);
-            document.getElementById('expense-display').textContent = formatCurrency(Math.abs(monthlyExpense));
-
-            const accList = document.getElementById('account-balances-list');
-            accList.innerHTML = state.accounts.map(acc => `
-                <div class="account-card">
-                    <div class="account-card-header"><i class="fa-solid fa-landmark"></i><span>${acc.name}</span></div>
-                    <p class="account-card-balance">${formatCurrency(getAccountBalance(acc.id))}</p>
-                </div>`).join('');
-
+            
+            const totalIncome = currentMonthTransactions
+                .filter(t => t.amount > 0)
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalExpenses = currentMonthTransactions
+                .filter(t => t.amount < 0)
+                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                
+            const balance = totalIncome - totalExpenses;
+            
+            document.getElementById('balance-display').textContent = formatCurrency(balance);
+            document.getElementById('income-display').textContent = formatCurrency(totalIncome);
+            document.getElementById('expense-display').textContent = formatCurrency(totalExpenses);
+            
+            // Render account balances
+            const accountBalancesList = document.getElementById('account-balances-list');
+            accountBalancesList.innerHTML = '';
+            state.accounts.forEach(account => {
+                const balance = getAccountBalance(account.id);
+                const accountCard = document.createElement('div');
+                accountCard.className = 'account-card';
+                accountCard.innerHTML = `
+                    <div class="account-card-header"><i class="fa-solid fa-landmark"></i> ${account.name}</div>
+                    <div class="account-card-balance">${formatCurrency(balance)}</div>
+                `;
+                accountBalancesList.appendChild(accountCard);
+            });
+            
+            // Render recent transactions (filtered)
             const transactionList = document.getElementById('transaction-list');
-            transactionList.innerHTML = [...state.transactions].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 10)
-                .map(t => createTransactionListItem(t)).join('');
-        };
-        
-        const renderPending = () => {
-            const pendingList = document.getElementById('pending-list');
-            const pendingTrans = state.transactions.filter(t => t.status === 'pending').sort((a,b) => new Date(a.date) - new Date(b.date));
-            if(pendingTrans.length === 0) {
-                pendingList.innerHTML = `<li class="list-item" style="cursor: default; justify-content: center;">Nenhuma transação pendente.</li>`;
-                return;
+            transactionList.innerHTML = '';
+            
+            const filteredTransactions = getFilteredTransactions()
+                .filter(t => t.status === 'completed')
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 10);
+                
+            if (filteredTransactions.length === 0) {
+                transactionList.innerHTML = '<li class="list-item">Nenhuma transação encontrada</li>';
+            } else {
+                filteredTransactions.forEach(transaction => {
+                    const category = state.categories.find(c => c.id === transaction.categoryId);
+                    const account = state.accounts.find(a => a.id === transaction.accountId);
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-item';
+                    listItem.dataset.id = transaction.id;
+                    
+                    listItem.innerHTML = `
+                        <div class="transaction-details">
+                            <span class="transaction-status ${transaction.status}"></span>
+                            <div class="transaction-info">
+                                <span class="description">${transaction.description}</span>
+                                <span class="details">${category?.name || 'Sem categoria'} • ${account?.name || 'Sem conta'} • ${new Date(transaction.date).toLocaleDateString('pt-BR')}</span>
+                            </div>
+                        </div>
+                        <div class="transaction-amount ${transaction.amount > 0 ? 'income' : 'expense'}">
+                            ${transaction.amount > 0 ? '+' : ''}${formatCurrency(transaction.amount)}
+                        </div>
+                    `;
+                    
+                    listItem.addEventListener('click', () => openViewEditModal(transaction.id));
+                    transactionList.appendChild(listItem);
+                });
             }
-            pendingList.innerHTML = pendingTrans.map(t => createTransactionListItem(t, true)).join('');
+            
+            // Gerar insights financeiros
+            generateFinancialInsights();
         };
 
-        const renderManagementList = (listId, items, icon, removeFnName) => {
-            const listEl = document.getElementById(listId);
-            if(items.length === 0) {
-                 listEl.innerHTML = `<li class="list-item" style="cursor: default; justify-content: center;">Nenhum item cadastrado.</li>`; return;
+        const renderPendingPage = () => {
+            const pendingList = document.getElementById('pending-list');
+            pendingList.innerHTML = '';
+            
+            const pendingTransactions = state.transactions.filter(t => t.status === 'pending');
+            
+            if (pendingTransactions.length === 0) {
+                pendingList.innerHTML = '<li class="list-item">Nenhuma transação pendente</li>';
+            } else {
+                pendingTransactions.forEach(transaction => {
+                    const category = state.categories.find(c => c.id === transaction.categoryId);
+                    const account = state.accounts.find(a => a.id === transaction.accountId);
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-item';
+                    listItem.dataset.id = transaction.id;
+                    
+                    listItem.innerHTML = `
+                        <div class="list-item-main">
+                            <div class="transaction-details">
+                                <span class="transaction-status pending"></span>
+                                <div class="transaction-info">
+                                    <span class="description">${transaction.description}</span>
+                                    <span class="details">${category?.name || 'Sem categoria'} • ${account?.name || 'Sem conta'} • ${new Date(transaction.date).toLocaleDateString('pt-BR')}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-item-actions">
+                            <div class="transaction-amount ${transaction.amount > 0 ? 'income' : 'expense'}">
+                                ${transaction.amount > 0 ? '+' : ''}${formatCurrency(transaction.amount)}
+                            </div>
+                            <div class="pending-actions">
+                                <button class="btn success confirm-btn" data-id="${transaction.id}">Confirmar</button>
+                                <button class="btn danger confirm-btn" data-id="${transaction.id}">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    pendingList.appendChild(listItem);
+                });
+                
+                // Add event listeners for confirm/delete buttons
+                document.querySelectorAll('.pending-actions .btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(btn.dataset.id);
+                        if (btn.classList.contains('success')) {
+                            confirmTransaction(id);
+                        } else if (btn.classList.contains('danger')) {
+                            deleteTransaction(id);
+                        }
+                    });
+                });
             }
-            listEl.innerHTML = items.map(item => `
-                <li class="list-item" style="cursor: default;">
-                    <div class="list-item-main">
-                        <i class="fa-solid ${icon}"></i>
-                        <span>${item.name}</span>
-                    </div>
-                    <button class="delete-btn" onclick="app.${removeFnName}(${item.id})"><i class="fa-solid fa-trash"></i></button>
-                </li>
-            `).join('');
         };
-        
-        // NOVO: Função específica para renderizar a página de contas com saldo
+
+        const renderCategoriesPage = () => {
+            const categoryList = document.getElementById('category-list');
+            categoryList.innerHTML = '';
+            
+            state.categories.forEach(category => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-item';
+                listItem.innerHTML = `
+                    <div class="list-item-main">
+                        <i class="fa-solid fa-tag"></i>
+                        <span>${category.name}</span>
+                    </div>
+                    <button class="delete-btn" data-id="${category.id}"><i class="fa-solid fa-trash"></i></button>
+                `;
+                
+                listItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteCategory(category.id);
+                });
+                
+                categoryList.appendChild(listItem);
+            });
+        };
+
         const renderAccountsPage = () => {
-            const listEl = document.getElementById('account-list');
-            const items = state.accounts;
-             if(items.length === 0) {
-                 listEl.innerHTML = `<li class="list-item" style="cursor: default; justify-content: center;">Nenhuma conta cadastrada.</li>`; return;
-            }
-            listEl.innerHTML = items.map(account => `
-                <li class="list-item" style="cursor: default;">
+            const accountList = document.getElementById('account-list');
+            accountList.innerHTML = '';
+            
+            state.accounts.forEach(account => {
+                const balance = getAccountBalance(account.id);
+                const listItem = document.createElement('li');
+                listItem.className = 'list-item';
+                listItem.innerHTML = `
                     <div class="list-item-main">
                         <i class="fa-solid fa-landmark"></i>
-                        <span>${account.name}</span>
-                    </div>
-                    <div class="list-item-actions">
-                         <span style="font-weight: 500; color: ${getAccountBalance(account.id) < 0 ? 'var(--danger-color)' : 'var(--text-color)'};">${formatCurrency(getAccountBalance(account.id))}</span>
-                         <button class="delete-btn" onclick="app.removeAccount(${account.id})" style="opacity:1;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </li>
-            `).join('');
-        }
-        
-        let charts = { expense: null, flow: null };
-        const renderReports = () => { /* ... (código dos relatórios permanece o mesmo) ... */ };
-
-        const renderActivePage = () => {
-            const pageRenderers = {
-                'dashboard-page': renderDashboard,
-                'pending-page': renderPending,
-                'categories-page': () => renderManagementList('category-list', state.categories, 'fa-tag', 'removeCategory'),
-                'accounts-page': renderAccountsPage, // MODIFICADO: Usa a nova função
-                'reports-page': renderReports
-            };
-            pageRenderers[state.activePage]?.();
-        };
-
-        // --- UTILITY & HELPER FUNCTIONS ---
-        const createTransactionListItem = (t, isPendingPage = false) => {
-            const type = t.amount < 0 ? 'expense' : 'income';
-            const category = state.categories.find(c => c.id === t.categoryId)?.name || 'N/A';
-            const account = state.accounts.find(a => a.id === t.accountId)?.name || 'N/A';
-            const actions = isPendingPage
-                ? `<div class="pending-actions"><button class="btn success confirm-btn" onclick="event.stopPropagation(); app.confirmTransaction(${t.id})">Confirmar</button></div>`
-                : `<span class="transaction-amount ${type}">${formatCurrency(t.amount)}</span>`;
-
-            return `
-                <li class="list-item" onclick="app.openViewEditModal(${t.id})">
-                    <div class="transaction-details">
-                        <div class="transaction-status ${t.status}"></div>
-                        <div class="transaction-info">
-                            <span class="description">${t.description}</span>
-                            <span class="details">${new Date(t.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' })} &bull; ${category} &bull; ${account}</span>
+                        <div>
+                            <div>${account.name}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light-color);">Saldo: ${formatCurrency(balance)}</div>
                         </div>
                     </div>
-                    <div class="list-item-actions">
-                         ${actions}
-                    </div>
-                </li>`;
-        };
-        
-        const openAddModal = () => {
-            document.getElementById('transaction-form').reset();
-            document.getElementById('category').innerHTML = state.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-            document.getElementById('account').innerHTML = state.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
-            document.getElementById('date').valueAsDate = new Date();
-            document.getElementById('add-modal-overlay').classList.add('active');
-        };
-
-        // --- APP LOGIC ---
-        window.app = {
-            addTransaction(e) { e.preventDefault();
-                state.transactions.push({
-                    id: Date.now(),
-                    description: document.getElementById('description').value,
-                    amount: parseFloat(document.getElementById('amount').value),
-                    date: document.getElementById('date').value,
-                    categoryId: parseInt(document.getElementById('category').value),
-                    accountId: parseInt(document.getElementById('account').value),
-                    status: document.getElementById('is-pending').checked ? 'pending' : 'completed'
+                    <button class="delete-btn" data-id="${account.id}"><i class="fa-solid fa-trash"></i></button>
+                `;
+                
+                listItem.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteAccount(account.id);
                 });
-                document.getElementById('add-modal-overlay').classList.remove('active');
-                updateUI();
-            },
-            saveTransactionEdit(e) { e.preventDefault();
-                const id = parseInt(document.getElementById('edit-transaction-id').value);
-                const transaction = state.transactions.find(t => t.id === id);
-                if (transaction) {
-                    transaction.description = document.getElementById('edit-description').value;
-                    transaction.amount = parseFloat(document.getElementById('edit-amount').value);
-                    transaction.date = document.getElementById('edit-date').value;
-                    transaction.categoryId = parseInt(document.getElementById('edit-category').value);
-                    transaction.accountId = parseInt(document.getElementById('edit-account').value);
-                    transaction.status = document.getElementById('edit-is-pending').checked ? 'pending' : 'completed';
-                }
-                document.getElementById('view-edit-modal-overlay').classList.remove('active');
-                updateUI();
-            },
-            openViewEditModal(id) {
-                const transaction = state.transactions.find(t => t.id === id);
-                if (!transaction) return;
+                
+                accountList.appendChild(listItem);
+            });
+        };
 
+        const renderReportsPage = () => {
+            // This would be expanded with actual chart rendering
+            const reportSummary = document.getElementById('report-summary');
+            reportSummary.innerHTML = `
+                <div class="card report-card"><div class="card-header"><span>Receitas Totais</span></div><p>${formatCurrency(state.transactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0))}</p></div>
+                <div class="card report-card"><div class="card-header"><span>Despesas Totais</span></div><p>${formatCurrency(state.transactions.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0))}</p></div>
+                <div class="card report-card"><div class="card-header"><span>Saldo Geral</span></div><p>${formatCurrency(state.transactions.reduce((sum, t) => sum + t.amount, 0))}</p></div>
+            `;
+        };
+
+        const renderActivePage = () => {
+            switch(state.activePage) {
+                case 'dashboard-page': renderDashboard(); break;
+                case 'pending-page': renderPendingPage(); break;
+                case 'categories-page': renderCategoriesPage(); break;
+                case 'accounts-page': renderAccountsPage(); break;
+                case 'reports-page': renderReportsPage(); break;
+            }
+            
+            // Atualizar dropdown de categorias nos filtros
+            updateCategoryFilter();
+        };
+
+        // --- FORM HANDLERS ---
+        const setupFormHandlers = () => {
+            // Category form
+            document.getElementById('category-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nameInput = document.getElementById('category-name');
+                const name = nameInput.value.trim();
+                if (name) {
+                    addCategory(name);
+                    nameInput.value = '';
+                }
+            });
+
+            // Account form
+            document.getElementById('account-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nameInput = document.getElementById('account-name');
+                const balanceInput = document.getElementById('account-initial-balance');
+                const name = nameInput.value.trim();
+                const initialBalance = parseFloat(balanceInput.value) || 0;
+                if (name) {
+                    addAccount(name, initialBalance);
+                    nameInput.value = '';
+                    balanceInput.value = '0';
+                }
+            });
+
+            // Transaction form
+            document.getElementById('transaction-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const description = document.getElementById('description').value;
+                const amount = parseFloat(document.getElementById('amount').value);
+                const date = document.getElementById('date').value;
+                const categoryId = parseInt(document.getElementById('category').value);
+                const accountId = parseInt(document.getElementById('account').value);
+                const isPending = document.getElementById('is-pending').checked;
+                
+                // Determinar o tipo de transação baseado no seletor
+                const typeSelector = document.querySelector('.transaction-type-selector .active');
+                const transactionType = typeSelector ? typeSelector.dataset.type : 'income';
+                
+                // Ajustar o valor baseado no tipo
+                const finalAmount = transactionType === 'income' ? Math.abs(amount) : -Math.abs(amount);
+                
+                addTransaction(description, finalAmount, date, categoryId, accountId, isPending ? 'pending' : 'completed');
+                closeAddModal();
+            });
+
+            // Edit transaction form
+            document.getElementById('edit-transaction-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = parseInt(document.getElementById('edit-transaction-id').value);
+                const description = document.getElementById('edit-description').value;
+                const amount = parseFloat(document.getElementById('edit-amount').value);
+                const date = document.getElementById('edit-date').value;
+                const categoryId = parseInt(document.getElementById('edit-category').value);
+                const accountId = parseInt(document.getElementById('edit-account').value);
+                const isPending = document.getElementById('edit-is-pending').checked;
+                
+                // Determinar o tipo de transação baseado no seletor
+                const typeSelector = document.querySelector('#view-edit-modal-overlay .transaction-type-selector .active');
+                const transactionType = typeSelector ? typeSelector.dataset.type : 'income';
+                
+                // Ajustar o valor baseado no tipo
+                const finalAmount = transactionType === 'income' ? Math.abs(amount) : -Math.abs(amount);
+                
+                updateTransaction(id, description, finalAmount, date, categoryId, accountId, isPending ? 'pending' : 'completed');
+                closeViewEditModal();
+            });
+        };
+
+        // --- DATA MANIPULATION FUNCTIONS ---
+        const addCategory = (name) => {
+            const newId = state.categories.length > 0 ? Math.max(...state.categories.map(c => c.id)) + 1 : 1;
+            state.categories.push({ id: newId, name });
+            saveState();
+            renderActivePage();
+            updateCategoryDropdowns();
+            updateCategoryFilter();
+        };
+
+        const deleteCategory = (id) => {
+            state.categories = state.categories.filter(c => c.id !== id);
+            saveState();
+            renderActivePage();
+            updateCategoryDropdowns();
+            updateCategoryFilter();
+        };
+
+        const addAccount = (name, initialBalance) => {
+            const newId = state.accounts.length > 0 ? Math.max(...state.accounts.map(a => a.id)) + 1 : 1;
+            state.accounts.push({ id: newId, name, initialBalance });
+            saveState();
+            renderActivePage();
+            updateAccountDropdowns();
+        };
+
+        const deleteAccount = (id) => {
+            state.accounts = state.accounts.filter(a => a.id !== id);
+            saveState();
+            renderActivePage();
+            updateAccountDropdowns();
+        };
+
+        const addTransaction = (description, amount, date, categoryId, accountId, status = 'completed') => {
+            const newId = state.transactions.length > 0 ? Math.max(...state.transactions.map(t => t.id)) + 1 : 1;
+            state.transactions.push({ id: newId, description, amount, date, categoryId, accountId, status });
+            saveState();
+            renderActivePage();
+        };
+
+        const updateTransaction = (id, description, amount, date, categoryId, accountId, status) => {
+            const transaction = state.transactions.find(t => t.id === id);
+            if (transaction) {
+                transaction.description = description;
+                transaction.amount = amount;
+                transaction.date = date;
+                transaction.categoryId = categoryId;
+                transaction.accountId = accountId;
+                transaction.status = status;
+                saveState();
+                renderActivePage();
+            }
+        };
+
+        const deleteTransaction = (id) => {
+            state.transactions = state.transactions.filter(t => t.id !== id);
+            saveState();
+            renderActivePage();
+        };
+
+        const confirmTransaction = (id) => {
+            const transaction = state.transactions.find(t => t.id === id);
+            if (transaction) {
+                transaction.status = 'completed';
+                saveState();
+                renderActivePage();
+            }
+        };
+
+        // --- DROPDOWN MANAGEMENT ---
+        const updateCategoryDropdowns = () => {
+            const categorySelect = document.getElementById('category');
+            const editCategorySelect = document.getElementById('edit-category');
+            
+            if (categorySelect) {
+                categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                state.categories.forEach(category => {
+                    categorySelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                });
+            }
+            
+            if (editCategorySelect) {
+                editCategorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+                state.categories.forEach(category => {
+                    editCategorySelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                });
+            }
+        };
+
+        const updateAccountDropdowns = () => {
+            const accountSelect = document.getElementById('account');
+            const editAccountSelect = document.getElementById('edit-account');
+            
+            if (accountSelect) {
+                accountSelect.innerHTML = '<option value="">Selecione uma conta</option>';
+                state.accounts.forEach(account => {
+                    accountSelect.innerHTML += `<option value="${account.id}">${account.name}</option>`;
+                });
+            }
+            
+            if (editAccountSelect) {
+                editAccountSelect.innerHTML = '<option value="">Selecione uma conta</option>';
+                state.accounts.forEach(account => {
+                    editAccountSelect.innerHTML += `<option value="${account.id}">${account.name}</option>`;
+                });
+            }
+        };
+
+        // Atualizar dropdown de categorias nos filtros
+        const updateCategoryFilter = () => {
+            const categoryFilter = document.getElementById('filter-category');
+            if (categoryFilter) {
+                categoryFilter.innerHTML = '<option value="all">Todas</option>';
+                state.categories.forEach(category => {
+                    categoryFilter.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                });
+            }
+        };
+
+        // --- MODAL MANAGEMENT ---
+        const openAddModal = () => {
+            document.getElementById('add-modal-overlay').classList.add('active');
+            document.getElementById('date').valueAsDate = new Date();
+            updateCategoryDropdowns();
+            updateAccountDropdowns();
+            
+            // Resetar seletor de tipo para receita
+            document.querySelectorAll('.transaction-type-selector .transaction-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.transaction-type-btn.income').classList.add('active');
+        };
+
+        const closeAddModal = () => {
+            document.getElementById('add-modal-overlay').classList.remove('active');
+            document.getElementById('transaction-form').reset();
+        };
+
+        const openViewEditModal = (id) => {
+            const transaction = state.transactions.find(t => t.id === id);
+            if (transaction) {
                 document.getElementById('edit-transaction-id').value = transaction.id;
                 document.getElementById('edit-description').value = transaction.description;
-                document.getElementById('edit-amount').value = transaction.amount;
+                document.getElementById('edit-amount').value = Math.abs(transaction.amount);
                 document.getElementById('edit-date').value = transaction.date;
                 document.getElementById('edit-is-pending').checked = transaction.status === 'pending';
-
-                const catSelect = document.getElementById('edit-category');
-                catSelect.innerHTML = state.categories.map(c => `<option value="${c.id}" ${c.id === transaction.categoryId ? 'selected' : ''}>${c.name}</option>`).join('');
                 
-                const accSelect = document.getElementById('edit-account');
-                accSelect.innerHTML = state.accounts.map(a => `<option value="${a.id}" ${a.id === transaction.accountId ? 'selected' : ''}>${a.name}</option>`).join('');
-
-                document.getElementById('view-edit-modal-overlay').classList.add('active');
-            },
-            deleteTransactionFromModal() {
-                const id = parseInt(document.getElementById('edit-transaction-id').value);
-                if(confirm('Tem certeza que deseja excluir esta transação?')) {
-                    state.transactions = state.transactions.filter(t => t.id !== id);
-                    document.getElementById('view-edit-modal-overlay').classList.remove('active');
-                    updateUI();
+                // Configurar seletor de tipo baseado no valor da transação
+                const typeSelector = document.querySelectorAll('#view-edit-modal-overlay .transaction-type-btn');
+                typeSelector.forEach(btn => btn.classList.remove('active'));
+                
+                if (transaction.amount > 0) {
+                    document.querySelector('#view-edit-modal-overlay .transaction-type-btn.income').classList.add('active');
+                } else {
+                    document.querySelector('#view-edit-modal-overlay .transaction-type-btn.expense').classList.add('active');
                 }
-            },
-            downloadReceipt() {
+                
+                updateCategoryDropdowns();
+                updateAccountDropdowns();
+                
+                document.getElementById('edit-category').value = transaction.categoryId;
+                document.getElementById('edit-account').value = transaction.accountId;
+                
+                document.getElementById('view-edit-modal-overlay').classList.add('active');
+            }
+        };
+
+        const closeViewEditModal = () => {
+            document.getElementById('view-edit-modal-overlay').classList.remove('active');
+        };
+
+        // --- EVENT LISTENERS ---
+        const setupEventListeners = () => {
+            // Navigation
+            selectors.navLinks.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
+                    e.preventDefault();
+                    const link = e.target.tagName === 'A' ? e.target : e.target.parentElement;
+                    const pageId = link.dataset.page;
+                    if (pageId) navigateTo(pageId);
+                }
+            });
+
+            // Mobile menu
+            selectors.menuToggleBtn.addEventListener('click', () => {
+                selectors.sidebar.classList.toggle('open');
+                selectors.sidebarOverlay.classList.toggle('active');
+            });
+
+            selectors.sidebarOverlay.addEventListener('click', () => {
+                selectors.sidebar.classList.remove('open');
+                selectors.sidebarOverlay.classList.remove('active');
+            });
+
+            // FAB and modals
+            document.getElementById('fab-add-btn').addEventListener('click', openAddModal);
+            document.getElementById('cancel-add-btn').addEventListener('click', closeAddModal);
+            document.getElementById('cancel-edit-btn').addEventListener('click', closeViewEditModal);
+            
+            document.getElementById('delete-from-modal-btn').addEventListener('click', () => {
                 const id = parseInt(document.getElementById('edit-transaction-id').value);
-                const t = state.transactions.find(t => t.id === id);
-                if (!t) return;
+                deleteTransaction(id);
+                closeViewEditModal();
+            });
 
-                const category = state.categories.find(c => c.id === t.categoryId)?.name || 'N/A';
-                const account = state.accounts.find(a => a.id === t.accountId)?.name || 'N/A';
-                const type = t.amount < 0 ? 'DESPESA' : 'RECEITA';
-                const status = t.status === 'pending' ? 'PENDENTE' : 'EFETIVADA';
+            // Seletores de tipo de transação
+            document.querySelectorAll('.transaction-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.closest('.transaction-type-selector');
+                    parent.querySelectorAll('.transaction-type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
 
-                const content = `
-----------------------------------------
-        COMPROVANTE DE TRANSAÇÃO
-----------------------------------------
-
-Estabelecimento: ${t.description}
-Data: ${new Date(t.date).toLocaleDateString('pt-BR', {timeZone: 'UTC'})}
-Tipo: ${type}
-Status: ${status}
-
-Categoria: ${category}
-Conta: ${account}
-
-----------------------------------------
-VALOR: ${formatCurrency(t.amount)}
-----------------------------------------
-
-ID da Transação: ${t.id}
-Gerado em: ${new Date().toLocaleString('pt-BR')}
-`;
-
-                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `recibo_${t.description.replace(/\s+/g, '_')}_${t.id}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            },
-            confirmTransaction(id) {
-                const transaction = state.transactions.find(t => t.id === id);
-                if(transaction) transaction.status = 'completed';
-                updateUI();
-            },
-            removeTransaction: (id) => { if(confirm('Excluir transação?')) { state.transactions = state.transactions.filter(t => t.id !== id); updateUI(); } },
-            addCategory(e) { e.preventDefault(); const name = document.getElementById('category-name').value; if(name) { state.categories.push({ id: Date.now(), name }); e.target.reset(); updateUI(); } },
-            removeCategory(id) { if(state.transactions.some(t => t.categoryId === id)) return alert('Categoria em uso.'); if(confirm('Excluir categoria?')) { state.categories = state.categories.filter(c => c.id !== id); updateUI(); } },
-            addAccount(e) { e.preventDefault(); const name = document.getElementById('account-name').value; const balance = parseFloat(document.getElementById('account-initial-balance').value); if(name) { state.accounts.push({ id: Date.now(), name, initialBalance: balance || 0 }); e.target.reset(); updateUI(); } },
-            removeAccount(id) { if(state.transactions.some(t => t.accountId === id)) return alert('Conta em uso.'); if(confirm('Excluir conta?')) { state.accounts = state.accounts.filter(a => a.id !== id); updateUI(); } },
+            // Filtros do dashboard
+            document.getElementById('search-transactions').addEventListener('input', renderDashboard);
+            document.getElementById('filter-type').addEventListener('change', renderDashboard);
+            document.getElementById('filter-category').addEventListener('change', renderDashboard);
+            document.getElementById('filter-date').addEventListener('change', renderDashboard);
         };
-        
-        // --- EVENT LISTENERS & INITIALIZATION ---
-        const updateUI = () => { saveState(); renderActivePage(); };
-        
-        initializeData();
-        navigateTo(state.activePage);
 
-        selectors.navLinks.addEventListener('click', e => { const link = e.target.closest('a'); if (link?.dataset.page) navigateTo(link.dataset.page); });
-        
-        // Listeners do Modal de Adicionar
-        document.getElementById('fab-add-btn').addEventListener('click', openAddModal);
-        document.getElementById('cancel-add-btn').addEventListener('click', () => document.getElementById('add-modal-overlay').classList.remove('active'));
-        document.getElementById('transaction-form').addEventListener('submit', app.addTransaction);
-
-        // Listeners do Modal de Editar/Visualizar
-        document.getElementById('edit-transaction-form').addEventListener('submit', app.saveTransactionEdit);
-        document.getElementById('cancel-edit-btn').addEventListener('click', () => document.getElementById('view-edit-modal-overlay').classList.remove('active'));
-        document.getElementById('delete-from-modal-btn').addEventListener('click', app.deleteTransactionFromModal);
-        document.getElementById('download-receipt-btn').addEventListener('click', app.downloadReceipt);
-
-        // Listeners Gerais
-        document.getElementById('category-form').addEventListener('submit', app.addCategory);
-        document.getElementById('account-form').addEventListener('submit', app.addAccount);
-        document.getElementById('start-date').addEventListener('change', renderReports);
-        document.getElementById('end-date').addEventListener('change', renderReports);
-
-        // --- Mobile Menu Toggle ---
-        const toggleSidebar = () => {
-            selectors.sidebar.classList.toggle('open');
-            selectors.sidebarOverlay.classList.toggle('active');
+        // --- INITIALIZATION ---
+        const init = () => {
+            initializeData();
+            setupEventListeners();
+            setupFormHandlers();
+            updateCategoryDropdowns();
+            updateAccountDropdowns();
+            updateCategoryFilter();
+            navigateTo(state.activePage);
         };
-        selectors.menuToggleBtn.addEventListener('click', toggleSidebar);
-        selectors.sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        init();
     });
     </script>
 </body>
