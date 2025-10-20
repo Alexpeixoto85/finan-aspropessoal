@@ -19,7 +19,8 @@
             --primary-color: #5636D3; --secondary-color: #FF872C; --success-color: #12A454;
             --danger-color: #E83F5B; --pending-color: #4B90F7; --background-color: #F0F2F5;
             --text-color: #363F5F; --text-light-color: #969CB2; --card-bg-color: #FFFFFF;
-            --border-radius: 8px; --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --border-radius: 16px; --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); display: flex; }
@@ -42,12 +43,15 @@
 
         /* --- Elementos Comuns --- */
         .card { background-color: var(--card-bg-color); padding: 1.5rem 2rem; border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
+        .iphone-card { background-color: var(--card-bg-color); padding: 1.5rem; border-radius: var(--border-radius); box-shadow: var(--card-shadow); margin-bottom: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .iphone-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
         .btn { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease; }
         .btn.primary { background-color: var(--primary-color); color: white; }
         .btn.secondary { background-color: #e0e0e0; color: var(--text-color); }
         .btn.success { background-color: var(--success-color); color: white; }
         .btn.danger { background-color: var(--danger-color); color: white; }
         .btn.download { background-color: var(--pending-color); color: white; }
+        .btn.edit { background-color: #4B90F7; color: white; }
         .list-item { background-color: var(--card-bg-color); padding: 1rem 1.5rem; margin-bottom: 0.5rem; border-radius: var(--border-radius); display: flex; align-items: center; justify-content: space-between; position: relative; cursor: pointer; transition: background-color 0.2s ease; }
         .list-item:hover { background-color: #f8f9fa; }
         .list-item:hover .delete-btn { opacity: 1; }
@@ -123,27 +127,27 @@
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999; }
         .sidebar-overlay.active { display: block; }
         
-        /* --- Novos estilos para as funcionalidades adicionadas --- */
-        .transaction-type-selector { display: flex; gap: 10px; margin-bottom: 1rem; }
-        .transaction-type-btn { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background-color: #f8f9fa; cursor: pointer; text-align: center; transition: all 0.3s ease; }
-        .transaction-type-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
-        .transaction-type-btn.income.active { background-color: var(--success-color); border-color: var(--success-color); }
-        .transaction-type-btn.expense.active { background-color: var(--danger-color); border-color: var(--danger-color); }
+        /* --- Dashboard Cards --- */
+        .dashboard-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .dashboard-card { background-color: var(--card-bg-color); padding: 1.5rem; border-radius: var(--border-radius); box-shadow: var(--card-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .dashboard-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
+        .dashboard-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .dashboard-card-title { font-size: 1.1rem; font-weight: 500; }
+        .dashboard-card-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .dashboard-card-content { font-size: 1.8rem; font-weight: 600; margin-bottom: 1rem; }
+        .dashboard-card-footer { font-size: 0.9rem; color: var(--text-light-color); }
         
-        .dashboard-filters { background-color: var(--card-bg-color); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; box-shadow: var(--box-shadow); }
-        .dashboard-filters .form-control { flex-grow: 1; min-width: 200px; }
-        .dashboard-filters label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        .dashboard-filters input, .dashboard-filters select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        /* --- Cores dos Cards --- */
+        .card-1 { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; }
+        .card-2 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: white; }
+        .card-3 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: var(--text-color); }
+        .card-4 { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); color: var(--text-color); }
+        .card-5 { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); color: white; }
+        .card-6 { background: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%); color: white; }
         
-        .insights-section { background-color: var(--card-bg-color); padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; box-shadow: var(--box-shadow); }
-        .insights-section h3 { margin-bottom: 1rem; color: var(--primary-color); }
-        .insight-item { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee; }
-        .insight-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-        .insight-title { font-weight: 600; margin-bottom: 0.5rem; }
-        .insight-description { font-size: 0.9rem; color: var(--text-light-color); }
-        .insight-positive { border-left: 4px solid var(--success-color); padding-left: 1rem; }
-        .insight-warning { border-left: 4px solid var(--secondary-color); padding-left: 1rem; }
-        .insight-danger { border-left: 4px solid var(--danger-color); padding-left: 1rem; }
+        /* --- Backup Section --- */
+        .backup-section { background-color: #fff; padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; }
+        .backup-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
         
         /* --- Responsividade --- */
         @media (max-width: 768px) {
@@ -157,8 +161,8 @@
             .fab { right: 1.5rem; bottom: 1.5rem; }
             .list-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
             .list-item-actions { width: 100%; justify-content: flex-end; }
-            .transaction-type-selector { flex-direction: column; }
-            .dashboard-filters { flex-direction: column; }
+            .dashboard-card-grid { grid-template-columns: 1fr; }
+            .backup-actions { flex-direction: column; }
         }
 
     </style>
@@ -174,6 +178,7 @@
                 <li><a data-page="categories-page"><i class="fa-solid fa-tags"></i> Categorias</a></li>
                 <li><a data-page="accounts-page"><i class="fa-solid fa-credit-card"></i> Contas</a></li>
                 <li><a data-page="reports-page"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
+                <li><a data-page="backup-page"><i class="fa-solid fa-download"></i> Backup</a></li>
             </ul>
         </nav>
     </aside>
@@ -187,48 +192,41 @@
         <section id="dashboard-page" class="page-content active">
             <header><h2>Dashboard</h2></header>
             
-            <!-- Filtros e busca adicionados -->
-            <div class="dashboard-filters">
-                <div class="form-control">
-                    <label for="search-transactions">Buscar transações</label>
-                    <input type="text" id="search-transactions" placeholder="Descrição, categoria...">
+            <div class="dashboard-card-grid">
+                <div class="dashboard-card card-1">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">Saldo Geral</div>
+                        <div class="dashboard-card-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                    </div>
+                    <div class="dashboard-card-content" id="balance-display">R$ 0,00</div>
+                    <div class="dashboard-card-footer">Atualizado em tempo real</div>
                 </div>
-                <div class="form-control">
-                    <label for="filter-type">Tipo</label>
-                    <select id="filter-type">
-                        <option value="all">Todos</option>
-                        <option value="income">Receitas</option>
-                        <option value="expense">Despesas</option>
-                    </select>
+                
+                <div class="dashboard-card card-2">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">Receitas do Mês</div>
+                        <div class="dashboard-card-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                    </div>
+                    <div class="dashboard-card-content" id="income-display">R$ 0,00</div>
+                    <div class="dashboard-card-footer">Baseado nas transações efetivadas</div>
                 </div>
-                <div class="form-control">
-                    <label for="filter-category">Categoria</label>
-                    <select id="filter-category">
-                        <option value="all">Todas</option>
-                    </select>
+                
+                <div class="dashboard-card card-3">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">Despesas do Mês</div>
+                        <div class="dashboard-card-icon"><i class="fa-solid fa-arrow-down"></i></div>
+                    </div>
+                    <div class="dashboard-card-content" id="expense-display">R$ 0,00</div>
+                    <div class="dashboard-card-footer">Baseado nas transações efetivadas</div>
                 </div>
-                <div class="form-control">
-                    <label for="filter-date">Período</label>
-                    <select id="filter-date">
-                        <option value="all">Todo período</option>
-                        <option value="current-month">Mês atual</option>
-                        <option value="last-month">Mês anterior</option>
-                        <option value="last-3-months">Últimos 3 meses</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div id="dashboard-cards">
-                <div class="card balance"><div class="card-header"><span>Saldo Geral</span><i class="fa-solid fa-dollar-sign"></i></div><p id="balance-display">R$ 0,00</p></div>
-                <div class="card income"><div class="card-header"><span>Receitas do Mês</span><i class="fa-solid fa-arrow-up"></i></div><p id="income-display">R$ 0,00</p></div>
-                <div class="card expense"><div class="card-header"><span>Despesas do Mês</span><i class="fa-solid fa-arrow-down"></i></div><p id="expense-display">R$ 0,00</p></div>
-            </div>
-            
-            <!-- Seção de Insights Inteligentes -->
-            <div class="insights-section">
-                <h3><i class="fa-solid fa-lightbulb"></i> Insights Financeiros</h3>
-                <div id="financial-insights">
-                    <!-- Os insights serão gerados dinamicamente pelo JavaScript -->
+                
+                <div class="dashboard-card card-4">
+                    <div class="dashboard-card-header">
+                        <div class="dashboard-card-title">Transações Pendentes</div>
+                        <div class="dashboard-card-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                    </div>
+                    <div class="dashboard-card-content" id="pending-total-display">R$ 0,00</div>
+                    <div class="dashboard-card-footer">Total de transações não confirmadas</div>
                 </div>
             </div>
             
@@ -236,17 +234,38 @@
                 <h3>Saldo das Contas</h3>
                 <div id="account-balances-list"></div>
             </div>
-            <div id="history"><h3>Últimas Transações</h3><ul id="transaction-list"></ul></div>
+            
+            <div class="iphone-card">
+                <h3>Transações Pendentes</h3>
+                <ul id="pending-dashboard-list"></ul>
+            </div>
+            
+            <div class="iphone-card">
+                <h3>Próximos Vencimentos</h3>
+                <ul id="upcoming-list"></ul>
+            </div>
+            
+            <div id="history">
+                <h3>Últimas Transações</h3>
+                <ul id="transaction-list"></ul>
+            </div>
         </section>
         
         <section id="pending-page" class="page-content">
             <header><h2>Transações Pendentes</h2></header>
-            <ul id="pending-list"></ul>
+            
+            <div class="iphone-card">
+                <div class="card-header">
+                    <span>Resumo das Pendências</span>
+                    <span id="pending-summary">Total: R$ 0,00</span>
+                </div>
+                <ul id="pending-list"></ul>
+            </div>
         </section>
 
         <section id="categories-page" class="page-content management-page">
             <header><h2>Gerenciar Categorias</h2></header>
-            <div class="card">
+            <div class="iphone-card">
                 <form id="category-form"><div class="form-control"><label for="category-name">Nome da Categoria</label><input type="text" id="category-name" required></div><button type="submit" class="btn primary">Adicionar</button></form>
             </div>
             <ul id="category-list"></ul>
@@ -254,7 +273,7 @@
         
         <section id="accounts-page" class="page-content management-page">
             <header><h2>Gerenciar Contas</h2></header>
-            <div class="card">
+            <div class="iphone-card">
                 <form id="account-form">
                     <div class="form-control"><label for="account-name">Nome da Conta</label><input type="text" id="account-name" required></div>
                     <div class="form-control"><label for="account-initial-balance">Saldo Inicial</label><input type="number" id="account-initial-balance" step="0.01" value="0" required></div>
@@ -266,13 +285,42 @@
 
         <section id="reports-page" class="page-content">
             <header><h2>Relatórios</h2></header>
-            <div class="filters">
-                <div class="form-control"><label for="start-date">Data Início</label><input type="date" id="start-date"></div>
-                <div class="form-control"><label for="end-date">Data Fim</label><input type="date" id="end-date"></div>
+            
+            <div class="iphone-card">
+                <div class="filters">
+                    <div class="form-control"><label for="start-date">Data Início</label><input type="date" id="start-date"></div>
+                    <div class="form-control"><label for="end-date">Data Fim</label><input type="date" id="end-date"></div>
+                    <button class="btn download" id="download-report-btn"><i class="fa-solid fa-download"></i> Baixar Relatório</button>
+                </div>
             </div>
+            
             <div id="report-summary"></div>
             <div class="chart-container"><h3>Despesas por Categoria</h3><canvas id="expense-chart"></canvas></div>
             <div class="chart-container"><h3>Receitas vs. Despesas</h3><canvas id="flow-chart"></canvas></div>
+        </section>
+        
+        <section id="backup-page" class="page-content">
+            <header><h2>Backup e Restauração</h2></header>
+            
+            <div class="iphone-card">
+                <h3>Backup dos Dados</h3>
+                <p>Faça backup de todos os seus dados financeiros para garantir que não serão perdidos.</p>
+                <div class="backup-actions">
+                    <button class="btn primary" id="backup-btn"><i class="fa-solid fa-download"></i> Fazer Backup</button>
+                    <button class="btn download" id="download-all-btn"><i class="fa-solid fa-file-download"></i> Baixar Todos os Dados</button>
+                </div>
+            </div>
+            
+            <div class="iphone-card">
+                <h3>Restaurar Dados</h3>
+                <p>Restaurar dados de um backup anterior.</p>
+                <div class="backup-actions">
+                    <input type="file" id="restore-file" accept=".json" style="display: none;">
+                    <button class="btn secondary" id="choose-file-btn"><i class="fa-solid fa-file-upload"></i> Escolher Arquivo</button>
+                    <button class="btn success" id="restore-btn" disabled><i class="fa-solid fa-upload"></i> Restaurar Dados</button>
+                </div>
+                <p id="restore-status" style="margin-top: 1rem; font-size: 0.9rem;"></p>
+            </div>
         </section>
     </main>
 
@@ -282,15 +330,9 @@
         <div class="modal-content">
             <h3>Nova Transação</h3>
             <form id="transaction-form">
-                <!-- Seletor de tipo de transação adicionado -->
-                <div class="transaction-type-selector">
-                    <div class="transaction-type-btn income active" data-type="income">Receita</div>
-                    <div class="transaction-type-btn expense" data-type="expense">Despesa</div>
-                </div>
-                
                 <div class="form-control"><label for="description">Descrição</label><input type="text" id="description" required></div>
                 <div class="form-grid">
-                    <div class="form-control"><label for="amount">Valor</label><input type="number" id="amount" placeholder="Ex: 1500,00" step="0.01" required></div>
+                    <div class="form-control"><label for="amount">Valor</label><input type="number" id="amount" placeholder="Ex: -50,00 ou 1500,00" step="0.01" required></div>
                     <div class="form-control"><label for="date">Data</label><input type="date" id="date" required></div>
                 </div>
                 <div class="form-grid">
@@ -308,16 +350,9 @@
             <h3>Detalhes da Transação</h3>
             <form id="edit-transaction-form">
                 <input type="hidden" id="edit-transaction-id">
-                
-                <!-- Seletor de tipo de transação adicionado -->
-                <div class="transaction-type-selector">
-                    <div class="transaction-type-btn income" data-type="income">Receita</div>
-                    <div class="transaction-type-btn expense" data-type="expense">Despesa</div>
-                </div>
-                
                 <div class="form-control"><label for="edit-description">Descrição</label><input type="text" id="edit-description" required></div>
                 <div class="form-grid">
-                    <div class="form-control"><label for="edit-amount">Valor</label><input type="number" id="edit-amount" placeholder="Ex: 1500,00" step="0.01" required></div>
+                    <div class="form-control"><label for="edit-amount">Valor</label><input type="number" id="edit-amount" placeholder="Ex: -50,00 ou 1500,00" step="0.01" required></div>
                     <div class="form-control"><label for="edit-date">Data</label><input type="date" id="edit-date" required></div>
                 </div>
                 <div class="form-grid">
@@ -328,7 +363,8 @@
                 <div class="modal-actions">
                     <button type="button" class="btn danger" id="delete-from-modal-btn">Excluir</button>
                     <div class="spacer"></div>
-                    <button type="button" class="btn download" id="download-receipt-btn"><i class="fa-solid fa-download"></i> Baixar</button>
+                    <button type="button" class="btn download" id="download-receipt-btn"><i class="fa-solid fa-download"></i> Baixar Recibo</button>
+                    <button type="button" class="btn edit" id="edit-transaction-btn"><i class="fa-solid fa-edit"></i> Editar</button>
                     <button type="button" class="btn secondary" id="cancel-edit-btn">Cancelar</button>
                     <button type="submit" class="btn primary">Salvar</button>
                 </div>
@@ -412,411 +448,183 @@
             return (account.initialBalance || 0) + totalTransactions;
         };
 
-        // Função para filtrar transações baseadas nos filtros do dashboard
-        const getFilteredTransactions = () => {
-            const searchTerm = document.getElementById('search-transactions').value.toLowerCase();
-            const typeFilter = document.getElementById('filter-type').value;
-            const categoryFilter = document.getElementById('filter-category').value;
-            const dateFilter = document.getElementById('filter-date').value;
-            
-            let filtered = [...state.transactions];
-            
-            // Filtro por busca
-            if (searchTerm) {
-                filtered = filtered.filter(t => {
-                    const category = state.categories.find(c => c.id === t.categoryId)?.name || '';
-                    return t.description.toLowerCase().includes(searchTerm) || 
-                           category.toLowerCase().includes(searchTerm);
-                });
-            }
-            
-            // Filtro por tipo
-            if (typeFilter !== 'all') {
-                filtered = filtered.filter(t => {
-                    if (typeFilter === 'income') return t.amount > 0;
-                    if (typeFilter === 'expense') return t.amount < 0;
-                    return true;
-                });
-            }
-            
-            // Filtro por categoria
-            if (categoryFilter !== 'all') {
-                filtered = filtered.filter(t => t.categoryId === parseInt(categoryFilter));
-            }
-            
-            // Filtro por período
-            if (dateFilter !== 'all') {
-                const now = new Date();
-                filtered = filtered.filter(t => {
-                    const tDate = new Date(t.date);
-                    
-                    switch(dateFilter) {
-                        case 'current-month':
-                            return tDate.getMonth() === now.getMonth() && 
-                                   tDate.getFullYear() === now.getFullYear();
-                        case 'last-month':
-                            const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
-                            const year = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
-                            return tDate.getMonth() === lastMonth && 
-                                   tDate.getFullYear() === year;
-                        case 'last-3-months':
-                            const threeMonthsAgo = new Date();
-                            threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-                            return tDate >= threeMonthsAgo;
-                        default:
-                            return true;
-                    }
-                });
-            }
-            
-            return filtered;
-        };
-
-        // Função para gerar insights financeiros
-        const generateFinancialInsights = () => {
-            const insightsContainer = document.getElementById('financial-insights');
-            if (!insightsContainer) return;
-            
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-            
-            // Transações do mês atual
-            const currentMonthTransactions = state.transactions.filter(t => {
-                const tDate = new Date(t.date);
-                return t.status === 'completed' && 
-                       tDate.getMonth() === currentMonth && 
-                       tDate.getFullYear() === currentYear;
-            });
-            
-            // Transações do mês anterior
-            const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-            const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-            const lastMonthTransactions = state.transactions.filter(t => {
-                const tDate = new Date(t.date);
-                return t.status === 'completed' && 
-                       tDate.getMonth() === lastMonth && 
-                       tDate.getFullYear() === lastMonthYear;
-            });
-            
-            // Cálculos para o mês atual
-            const currentMonthIncome = currentMonthTransactions
-                .filter(t => t.amount > 0)
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const currentMonthExpenses = currentMonthTransactions
-                .filter(t => t.amount < 0)
-                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-                
-            const currentMonthBalance = currentMonthIncome - currentMonthExpenses;
-            
-            // Cálculos para o mês anterior
-            const lastMonthIncome = lastMonthTransactions
-                .filter(t => t.amount > 0)
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const lastMonthExpenses = lastMonthTransactions
-                .filter(t => t.amount < 0)
-                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-                
-            const lastMonthBalance = lastMonthIncome - lastMonthExpenses;
-            
-            // Análise por categoria
-            const categoryExpenses = {};
-            currentMonthTransactions
-                .filter(t => t.amount < 0)
-                .forEach(t => {
-                    const category = state.categories.find(c => c.id === t.categoryId)?.name || 'Outros';
-                    categoryExpenses[category] = (categoryExpenses[category] || 0) + Math.abs(t.amount);
-                });
-            
-            // Encontrar a categoria com maior gasto
-            const highestExpenseCategory = Object.keys(categoryExpenses).length > 0 ? 
-                Object.keys(categoryExpenses).reduce((a, b) => categoryExpenses[a] > categoryExpenses[b] ? a : b) : null;
-            
-            // Gerar insights
-            const insights = [];
-            
-            // Insight 1: Comparação com o mês anterior
-            if (lastMonthIncome > 0) {
-                const incomeChange = ((currentMonthIncome - lastMonthIncome) / lastMonthIncome * 100).toFixed(1);
-                if (Math.abs(incomeChange) > 5) {
-                    insights.push({
-                        title: incomeChange > 0 ? 'Receitas em Crescimento' : 'Atenção às Receitas',
-                        description: incomeChange > 0 ? 
-                            `Suas receitas aumentaram ${incomeChange}% em relação ao mês anterior. Continue assim!` :
-                            `Suas receitas diminuíram ${Math.abs(incomeChange)}% em relação ao mês anterior. Considere revisar suas fontes de renda.`,
-                        type: incomeChange > 0 ? 'positive' : 'warning'
-                    });
-                }
-            }
-            
-            // Insight 2: Controle de gastos
-            if (currentMonthExpenses > 0) {
-                const expenseToIncomeRatio = (currentMonthExpenses / currentMonthIncome * 100).toFixed(1);
-                if (expenseToIncomeRatio > 80) {
-                    insights.push({
-                        title: 'Alerta de Gastos Elevados',
-                        description: `Seus gastos representam ${expenseToIncomeRatio}% da sua receita. Considere reduzir despesas para melhorar sua saúde financeira.`,
-                        type: 'danger'
-                    });
-                } else if (expenseToIncomeRatio < 50) {
-                    insights.push({
-                        title: 'Bom Controle de Gastos',
-                        description: `Seus gastos representam apenas ${expenseToIncomeRatio}% da sua receita. Excelente controle financeiro!`,
-                        type: 'positive'
-                    });
-                }
-            }
-            
-            // Insight 3: Categoria com maior gasto
-            if (highestExpenseCategory) {
-                const highestExpenseAmount = categoryExpenses[highestExpenseCategory];
-                insights.push({
-                    title: 'Maior Gasto por Categoria',
-                    description: `Sua maior despesa foi em "${highestExpenseCategory}" com ${formatCurrency(highestExpenseAmount)}. Considere revisar gastos nesta categoria.`,
-                    type: highestExpenseAmount > (currentMonthIncome * 0.3) ? 'warning' : 'positive'
-                });
-            }
-            
-            // Insight 4: Saldo do mês
-            if (currentMonthBalance < 0) {
-                insights.push({
-                    title: 'Saldo Negativo',
-                    description: `Seu saldo este mês é negativo (${formatCurrency(currentMonthBalance)}). É importante ajustar suas finanças para evitar endividamento.`,
-                    type: 'danger'
-                });
-            } else if (currentMonthBalance > (currentMonthIncome * 0.2)) {
-                insights.push({
-                    title: 'Boa Capacidade de Poupança',
-                    description: `Você está poupando ${formatCurrency(currentMonthBalance)} este mês, o que representa uma boa taxa de economia.`,
-                    type: 'positive'
-                });
-            }
-            
-            // Insight 5: Dicas de otimização
-            if (currentMonthIncome > 0 && currentMonthExpenses > 0) {
-                const potentialSavings = currentMonthExpenses * 0.1; // 10% de economia potencial
-                insights.push({
-                    title: 'Oportunidade de Economia',
-                    description: `Reduzindo apenas 10% dos seus gastos, você poderia economizar ${formatCurrency(potentialSavings)} por mês.`,
-                    type: 'warning'
-                });
-            }
-            
-            // Renderizar insights
-            insightsContainer.innerHTML = '';
-            if (insights.length === 0) {
-                insightsContainer.innerHTML = '<p>Não há dados suficientes para gerar insights. Continue registrando suas transações.</p>';
-            } else {
-                insights.forEach(insight => {
-                    const insightEl = document.createElement('div');
-                    insightEl.className = `insight-item insight-${insight.type}`;
-                    insightEl.innerHTML = `
-                        <div class="insight-title">${insight.title}</div>
-                        <div class="insight-description">${insight.description}</div>
-                    `;
-                    insightsContainer.appendChild(insightEl);
-                });
-            }
-        };
-
         const renderDashboard = () => {
             const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-            
-            const currentMonthTransactions = state.transactions.filter(t => {
+            const monthlyTrans = state.transactions.filter(t => {
                 const tDate = new Date(t.date);
-                return t.status === 'completed' && 
-                       tDate.getMonth() === currentMonth && 
-                       tDate.getFullYear() === currentYear;
+                return t.status === 'completed' && tDate.getMonth() === now.getMonth() && tDate.getFullYear() === now.getFullYear();
             });
+            const monthlyIncome = monthlyTrans.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+            const monthlyExpense = monthlyTrans.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0);
+            const totalBalance = state.accounts.reduce((sum, acc) => sum + getAccountBalance(acc.id), 0);
             
-            const totalIncome = currentMonthTransactions
-                .filter(t => t.amount > 0)
+            // Calcular total de transações pendentes
+            const pendingTotal = state.transactions
+                .filter(t => t.status === 'pending')
                 .reduce((sum, t) => sum + t.amount, 0);
-                
-            const totalExpenses = currentMonthTransactions
-                .filter(t => t.amount < 0)
-                .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-                
-            const balance = totalIncome - totalExpenses;
-            
-            document.getElementById('balance-display').textContent = formatCurrency(balance);
-            document.getElementById('income-display').textContent = formatCurrency(totalIncome);
-            document.getElementById('expense-display').textContent = formatCurrency(totalExpenses);
-            
-            // Render account balances
-            const accountBalancesList = document.getElementById('account-balances-list');
-            accountBalancesList.innerHTML = '';
-            state.accounts.forEach(account => {
-                const balance = getAccountBalance(account.id);
-                const accountCard = document.createElement('div');
-                accountCard.className = 'account-card';
-                accountCard.innerHTML = `
-                    <div class="account-card-header"><i class="fa-solid fa-landmark"></i> ${account.name}</div>
-                    <div class="account-card-balance">${formatCurrency(balance)}</div>
-                `;
-                accountBalancesList.appendChild(accountCard);
-            });
-            
-            // Render recent transactions (filtered)
+
+            document.getElementById('balance-display').textContent = formatCurrency(totalBalance);
+            document.getElementById('income-display').textContent = formatCurrency(monthlyIncome);
+            document.getElementById('expense-display').textContent = formatCurrency(Math.abs(monthlyExpense));
+            document.getElementById('pending-total-display').textContent = formatCurrency(Math.abs(pendingTotal));
+
+            const accList = document.getElementById('account-balances-list');
+            accList.innerHTML = state.accounts.map(acc => `
+                <div class="account-card">
+                    <div class="account-card-header"><i class="fa-solid fa-landmark"></i><span>${acc.name}</span></div>
+                    <p class="account-card-balance">${formatCurrency(getAccountBalance(acc.id))}</p>
+                </div>`).join('');
+
             const transactionList = document.getElementById('transaction-list');
-            transactionList.innerHTML = '';
-            
-            const filteredTransactions = getFilteredTransactions()
+            transactionList.innerHTML = [...state.transactions]
                 .filter(t => t.status === 'completed')
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .slice(0, 10);
+                .sort((a,b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 10)
+                .map(t => createTransactionListItem(t)).join('');
                 
-            if (filteredTransactions.length === 0) {
-                transactionList.innerHTML = '<li class="list-item">Nenhuma transação encontrada</li>';
+            // Renderizar transações pendentes no dashboard
+            const pendingDashboardList = document.getElementById('pending-dashboard-list');
+            const pendingTrans = state.transactions
+                .filter(t => t.status === 'pending')
+                .slice(0, 5);
+                
+            if (pendingTrans.length === 0) {
+                pendingDashboardList.innerHTML = '<li class="list-item"><span>Nenhuma transação pendente</span></li>';
             } else {
-                filteredTransactions.forEach(transaction => {
-                    const category = state.categories.find(c => c.id === transaction.categoryId);
-                    const account = state.accounts.find(a => a.id === transaction.accountId);
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-item';
-                    listItem.dataset.id = transaction.id;
-                    
-                    listItem.innerHTML = `
-                        <div class="transaction-details">
-                            <span class="transaction-status ${transaction.status}"></span>
-                            <div class="transaction-info">
-                                <span class="description">${transaction.description}</span>
-                                <span class="details">${category?.name || 'Sem categoria'} • ${account?.name || 'Sem conta'} • ${new Date(transaction.date).toLocaleDateString('pt-BR')}</span>
-                            </div>
-                        </div>
-                        <div class="transaction-amount ${transaction.amount > 0 ? 'income' : 'expense'}">
-                            ${transaction.amount > 0 ? '+' : ''}${formatCurrency(transaction.amount)}
-                        </div>
-                    `;
-                    
-                    listItem.addEventListener('click', () => openViewEditModal(transaction.id));
-                    transactionList.appendChild(listItem);
-                });
+                pendingDashboardList.innerHTML = pendingTrans.map(t => createPendingListItem(t)).join('');
             }
             
-            // Gerar insights financeiros
-            generateFinancialInsights();
+            // Renderizar próximos vencimentos
+            const upcomingList = document.getElementById('upcoming-list');
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+            
+            const upcomingTrans = state.transactions
+                .filter(t => {
+                    const tDate = new Date(t.date);
+                    return t.status === 'pending' && tDate >= today && tDate <= nextWeek;
+                })
+                .sort((a,b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+                
+            if (upcomingTrans.length === 0) {
+                upcomingList.innerHTML = '<li class="list-item"><span>Nenhum vencimento próximo</span></li>';
+            } else {
+                upcomingList.innerHTML = upcomingTrans.map(t => createPendingListItem(t)).join('');
+            }
         };
 
         const renderPendingPage = () => {
+            const pendingTrans = state.transactions.filter(t => t.status === 'pending');
+            const pendingTotal = pendingTrans.reduce((sum, t) => sum + t.amount, 0);
+            
+            document.getElementById('pending-summary').textContent = `Total: ${formatCurrency(Math.abs(pendingTotal))}`;
+            
             const pendingList = document.getElementById('pending-list');
-            pendingList.innerHTML = '';
-            
-            const pendingTransactions = state.transactions.filter(t => t.status === 'pending');
-            
-            if (pendingTransactions.length === 0) {
-                pendingList.innerHTML = '<li class="list-item">Nenhuma transação pendente</li>';
+            if (pendingTrans.length === 0) {
+                pendingList.innerHTML = '<li class="list-item"><span>Nenhuma transação pendente</span></li>';
             } else {
-                pendingTransactions.forEach(transaction => {
-                    const category = state.categories.find(c => c.id === transaction.categoryId);
-                    const account = state.accounts.find(a => a.id === transaction.accountId);
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-item';
-                    listItem.dataset.id = transaction.id;
-                    
-                    listItem.innerHTML = `
-                        <div class="list-item-main">
-                            <div class="transaction-details">
-                                <span class="transaction-status pending"></span>
-                                <div class="transaction-info">
-                                    <span class="description">${transaction.description}</span>
-                                    <span class="details">${category?.name || 'Sem categoria'} • ${account?.name || 'Sem conta'} • ${new Date(transaction.date).toLocaleDateString('pt-BR')}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-item-actions">
-                            <div class="transaction-amount ${transaction.amount > 0 ? 'income' : 'expense'}">
-                                ${transaction.amount > 0 ? '+' : ''}${formatCurrency(transaction.amount)}
-                            </div>
-                            <div class="pending-actions">
-                                <button class="btn success confirm-btn" data-id="${transaction.id}">Confirmar</button>
-                                <button class="btn danger confirm-btn" data-id="${transaction.id}">Excluir</button>
-                            </div>
-                        </div>
-                    `;
-                    
-                    pendingList.appendChild(listItem);
-                });
-                
-                // Add event listeners for confirm/delete buttons
-                document.querySelectorAll('.pending-actions .btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const id = parseInt(btn.dataset.id);
-                        if (btn.classList.contains('success')) {
-                            confirmTransaction(id);
-                        } else if (btn.classList.contains('danger')) {
-                            deleteTransaction(id);
-                        }
-                    });
-                });
+                pendingList.innerHTML = pendingTrans.map(t => createPendingListItem(t)).join('');
             }
         };
 
         const renderCategoriesPage = () => {
             const categoryList = document.getElementById('category-list');
-            categoryList.innerHTML = '';
-            
-            state.categories.forEach(category => {
-                const listItem = document.createElement('li');
-                listItem.className = 'list-item';
-                listItem.innerHTML = `
-                    <div class="list-item-main">
-                        <i class="fa-solid fa-tag"></i>
-                        <span>${category.name}</span>
+            categoryList.innerHTML = state.categories.map(cat => `
+                <li class="list-item">
+                    <div class="list-item-main"><i class="fa-solid fa-tag"></i><span>${cat.name}</span></div>
+                    <div class="list-item-actions">
+                        <button class="btn edit edit-category-btn" data-id="${cat.id}"><i class="fa-solid fa-edit"></i></button>
+                        <button class="delete-btn delete-category-btn" data-id="${cat.id}"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                    <button class="delete-btn" data-id="${category.id}"><i class="fa-solid fa-trash"></i></button>
-                `;
-                
-                listItem.querySelector('.delete-btn').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteCategory(category.id);
-                });
-                
-                categoryList.appendChild(listItem);
-            });
+                </li>`).join('');
         };
 
         const renderAccountsPage = () => {
             const accountList = document.getElementById('account-list');
-            accountList.innerHTML = '';
-            
-            state.accounts.forEach(account => {
-                const balance = getAccountBalance(account.id);
-                const listItem = document.createElement('li');
-                listItem.className = 'list-item';
-                listItem.innerHTML = `
-                    <div class="list-item-main">
-                        <i class="fa-solid fa-landmark"></i>
-                        <div>
-                            <div>${account.name}</div>
-                            <div style="font-size: 0.8rem; color: var(--text-light-color);">Saldo: ${formatCurrency(balance)}</div>
-                        </div>
+            accountList.innerHTML = state.accounts.map(acc => `
+                <li class="list-item">
+                    <div class="list-item-main"><i class="fa-solid fa-landmark"></i><span>${acc.name}</span></div>
+                    <div class="list-item-actions">
+                        <span>${formatCurrency(getAccountBalance(acc.id))}</span>
+                        <button class="btn edit edit-account-btn" data-id="${acc.id}"><i class="fa-solid fa-edit"></i></button>
+                        <button class="delete-btn delete-account-btn" data-id="${acc.id}"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                    <button class="delete-btn" data-id="${account.id}"><i class="fa-solid fa-trash"></i></button>
-                `;
-                
-                listItem.querySelector('.delete-btn').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteAccount(account.id);
-                });
-                
-                accountList.appendChild(listItem);
-            });
+                </li>`).join('');
         };
 
         const renderReportsPage = () => {
-            // This would be expanded with actual chart rendering
-            const reportSummary = document.getElementById('report-summary');
-            reportSummary.innerHTML = `
-                <div class="card report-card"><div class="card-header"><span>Receitas Totais</span></div><p>${formatCurrency(state.transactions.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0))}</p></div>
-                <div class="card report-card"><div class="card-header"><span>Despesas Totais</span></div><p>${formatCurrency(state.transactions.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0))}</p></div>
-                <div class="card report-card"><div class="card-header"><span>Saldo Geral</span></div><p>${formatCurrency(state.transactions.reduce((sum, t) => sum + t.amount, 0))}</p></div>
-            `;
+            const now = new Date();
+            const startDate = document.getElementById('start-date').value || `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-01`;
+            const endDate = document.getElementById('end-date').value || `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            
+            const filteredTrans = state.transactions.filter(t => {
+                const tDate = new Date(t.date);
+                const sDate = new Date(startDate);
+                const eDate = new Date(endDate);
+                return t.status === 'completed' && tDate >= sDate && tDate <= eDate;
+            });
+            
+            const income = filteredTrans.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+            const expense = filteredTrans.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0);
+            const balance = income + expense;
+            
+            document.getElementById('report-summary').innerHTML = `
+                <div class="report-card card-1">
+                    <div class="card-header"><span>Receitas</span><i class="fa-solid fa-arrow-up"></i></div>
+                    <p>${formatCurrency(income)}</p>
+                </div>
+                <div class="report-card card-2">
+                    <div class="card-header"><span>Despesas</span><i class="fa-solid fa-arrow-down"></i></div>
+                    <p>${formatCurrency(Math.abs(expense))}</p>
+                </div>
+                <div class="report-card card-3">
+                    <div class="card-header"><span>Saldo</span><i class="fa-solid fa-dollar-sign"></i></div>
+                    <p>${formatCurrency(balance)}</p>
+                </div>`;
+            
+            // Expense by Category Chart
+            const expenseByCategory = {};
+            filteredTrans.filter(t => t.amount < 0).forEach(t => {
+                const cat = state.categories.find(c => c.id === t.categoryId)?.name || 'Outros';
+                expenseByCategory[cat] = (expenseByCategory[cat] || 0) + Math.abs(t.amount);
+            });
+            
+            const expenseChart = document.getElementById('expense-chart').getContext('2d');
+            new Chart(expenseChart, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(expenseByCategory),
+                    datasets: [{
+                        data: Object.values(expenseByCategory),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+            
+            // Income vs Expense Chart
+            const monthlyData = {};
+            filteredTrans.forEach(t => {
+                const month = new Date(t.date).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' });
+                if (!monthlyData[month]) monthlyData[month] = { income: 0, expense: 0 };
+                if (t.amount > 0) monthlyData[month].income += t.amount;
+                else monthlyData[month].expense += Math.abs(t.amount);
+            });
+            
+            const flowChart = document.getElementById('flow-chart').getContext('2d');
+            new Chart(flowChart, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(monthlyData),
+                    datasets: [
+                        { label: 'Receitas', data: Object.values(monthlyData).map(d => d.income), backgroundColor: '#12A454' },
+                        { label: 'Despesas', data: Object.values(monthlyData).map(d => d.expense), backgroundColor: '#E83F5B' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         };
 
         const renderActivePage = () => {
@@ -827,144 +635,165 @@
                 case 'accounts-page': renderAccountsPage(); break;
                 case 'reports-page': renderReportsPage(); break;
             }
+        };
+
+        // --- HELPER FUNCTIONS ---
+        const createTransactionListItem = (transaction) => {
+            const category = state.categories.find(c => c.id === transaction.categoryId)?.name || 'Sem categoria';
+            const account = state.accounts.find(a => a.id === transaction.accountId)?.name || 'Sem conta';
+            const isIncome = transaction.amount > 0;
             
-            // Atualizar dropdown de categorias nos filtros
-            updateCategoryFilter();
+            return `<li class="list-item" data-id="${transaction.id}">
+                <div class="transaction-details">
+                    <div class="transaction-status ${transaction.status === 'completed' ? 'completed' : 'pending'}"></div>
+                    <div class="transaction-info">
+                        <span class="description">${transaction.description}</span>
+                        <span class="details">${category} • ${account}</span>
+                    </div>
+                </div>
+                <div class="transaction-amount ${isIncome ? 'income' : 'expense'}">
+                    ${formatCurrency(transaction.amount)}
+                </div>
+            </li>`;
         };
 
-        // --- FORM HANDLERS ---
-        const setupFormHandlers = () => {
-            // Category form
-            document.getElementById('category-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const nameInput = document.getElementById('category-name');
-                const name = nameInput.value.trim();
-                if (name) {
-                    addCategory(name);
-                    nameInput.value = '';
-                }
-            });
-
-            // Account form
-            document.getElementById('account-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const nameInput = document.getElementById('account-name');
-                const balanceInput = document.getElementById('account-initial-balance');
-                const name = nameInput.value.trim();
-                const initialBalance = parseFloat(balanceInput.value) || 0;
-                if (name) {
-                    addAccount(name, initialBalance);
-                    nameInput.value = '';
-                    balanceInput.value = '0';
-                }
-            });
-
-            // Transaction form
-            document.getElementById('transaction-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const description = document.getElementById('description').value;
-                const amount = parseFloat(document.getElementById('amount').value);
-                const date = document.getElementById('date').value;
-                const categoryId = parseInt(document.getElementById('category').value);
-                const accountId = parseInt(document.getElementById('account').value);
-                const isPending = document.getElementById('is-pending').checked;
-                
-                // Determinar o tipo de transação baseado no seletor
-                const typeSelector = document.querySelector('.transaction-type-selector .active');
-                const transactionType = typeSelector ? typeSelector.dataset.type : 'income';
-                
-                // Ajustar o valor baseado no tipo
-                const finalAmount = transactionType === 'income' ? Math.abs(amount) : -Math.abs(amount);
-                
-                addTransaction(description, finalAmount, date, categoryId, accountId, isPending ? 'pending' : 'completed');
-                closeAddModal();
-            });
-
-            // Edit transaction form
-            document.getElementById('edit-transaction-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const id = parseInt(document.getElementById('edit-transaction-id').value);
-                const description = document.getElementById('edit-description').value;
-                const amount = parseFloat(document.getElementById('edit-amount').value);
-                const date = document.getElementById('edit-date').value;
-                const categoryId = parseInt(document.getElementById('edit-category').value);
-                const accountId = parseInt(document.getElementById('edit-account').value);
-                const isPending = document.getElementById('edit-is-pending').checked;
-                
-                // Determinar o tipo de transação baseado no seletor
-                const typeSelector = document.querySelector('#view-edit-modal-overlay .transaction-type-selector .active');
-                const transactionType = typeSelector ? typeSelector.dataset.type : 'income';
-                
-                // Ajustar o valor baseado no tipo
-                const finalAmount = transactionType === 'income' ? Math.abs(amount) : -Math.abs(amount);
-                
-                updateTransaction(id, description, finalAmount, date, categoryId, accountId, isPending ? 'pending' : 'completed');
-                closeViewEditModal();
-            });
+        const createPendingListItem = (transaction) => {
+            const category = state.categories.find(c => c.id === transaction.categoryId)?.name || 'Sem categoria';
+            const account = state.accounts.find(a => a.id === transaction.accountId)?.name || 'Sem conta';
+            const isIncome = transaction.amount > 0;
+            const dueDate = new Date(transaction.date).toLocaleDateString('pt-BR');
+            
+            return `<li class="list-item" data-id="${transaction.id}">
+                <div class="transaction-details">
+                    <div class="transaction-status pending"></div>
+                    <div class="transaction-info">
+                        <span class="description">${transaction.description}</span>
+                        <span class="details">${category} • ${account} • Vencimento: ${dueDate}</span>
+                    </div>
+                </div>
+                <div class="transaction-amount ${isIncome ? 'income' : 'expense'}">
+                    ${formatCurrency(transaction.amount)}
+                </div>
+                <div class="pending-actions">
+                    <button class="btn success confirm-btn" data-id="${transaction.id}"><i class="fa-solid fa-check"></i> Confirmar</button>
+                    <button class="btn edit edit-btn" data-id="${transaction.id}"><i class="fa-solid fa-edit"></i></button>
+                </div>
+            </li>`;
         };
 
-        // --- DATA MANIPULATION FUNCTIONS ---
-        const addCategory = (name) => {
-            const newId = state.categories.length > 0 ? Math.max(...state.categories.map(c => c.id)) + 1 : 1;
-            state.categories.push({ id: newId, name });
+        const populateSelectOptions = () => {
+            const categorySelect = document.getElementById('category');
+            const accountSelect = document.getElementById('account');
+            const editCategorySelect = document.getElementById('edit-category');
+            const editAccountSelect = document.getElementById('edit-account');
+            
+            categorySelect.innerHTML = state.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            accountSelect.innerHTML = state.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            editCategorySelect.innerHTML = state.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            editAccountSelect.innerHTML = state.accounts.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+        };
+
+        // --- MODAL MANAGEMENT ---
+        const showModal = (modalId) => document.getElementById(modalId).classList.add('active');
+        const hideModal = (modalId) => document.getElementById(modalId).classList.remove('active');
+
+        const openAddModal = () => {
+            document.getElementById('transaction-form').reset();
+            document.getElementById('date').valueAsDate = new Date();
+            populateSelectOptions();
+            showModal('add-modal-overlay');
+        };
+
+        const openEditModal = (transactionId) => {
+            const transaction = state.transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
+            
+            document.getElementById('edit-transaction-id').value = transaction.id;
+            document.getElementById('edit-description').value = transaction.description;
+            document.getElementById('edit-amount').value = transaction.amount;
+            document.getElementById('edit-date').value = transaction.date;
+            document.getElementById('edit-is-pending').checked = transaction.status === 'pending';
+            
+            populateSelectOptions();
+            document.getElementById('edit-category').value = transaction.categoryId;
+            document.getElementById('edit-account').value = transaction.accountId;
+            
+            showModal('view-edit-modal-overlay');
+        };
+
+        // --- EVENT HANDLERS ---
+        const handleTransactionSubmit = (e) => {
+            e.preventDefault();
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const date = document.getElementById('date').value;
+            const categoryId = parseInt(document.getElementById('category').value);
+            const accountId = parseInt(document.getElementById('account').value);
+            const isPending = document.getElementById('is-pending').checked;
+            
+            const newTransaction = {
+                id: Date.now(),
+                description, amount, date, categoryId, accountId,
+                status: isPending ? 'pending' : 'completed'
+            };
+            
+            state.transactions.push(newTransaction);
             saveState();
-            renderActivePage();
-            updateCategoryDropdowns();
-            updateCategoryFilter();
-        };
-
-        const deleteCategory = (id) => {
-            state.categories = state.categories.filter(c => c.id !== id);
-            saveState();
-            renderActivePage();
-            updateCategoryDropdowns();
-            updateCategoryFilter();
-        };
-
-        const addAccount = (name, initialBalance) => {
-            const newId = state.accounts.length > 0 ? Math.max(...state.accounts.map(a => a.id)) + 1 : 1;
-            state.accounts.push({ id: newId, name, initialBalance });
-            saveState();
-            renderActivePage();
-            updateAccountDropdowns();
-        };
-
-        const deleteAccount = (id) => {
-            state.accounts = state.accounts.filter(a => a.id !== id);
-            saveState();
-            renderActivePage();
-            updateAccountDropdowns();
-        };
-
-        const addTransaction = (description, amount, date, categoryId, accountId, status = 'completed') => {
-            const newId = state.transactions.length > 0 ? Math.max(...state.transactions.map(t => t.id)) + 1 : 1;
-            state.transactions.push({ id: newId, description, amount, date, categoryId, accountId, status });
-            saveState();
+            hideModal('add-modal-overlay');
             renderActivePage();
         };
 
-        const updateTransaction = (id, description, amount, date, categoryId, accountId, status) => {
-            const transaction = state.transactions.find(t => t.id === id);
-            if (transaction) {
-                transaction.description = description;
-                transaction.amount = amount;
-                transaction.date = date;
-                transaction.categoryId = categoryId;
-                transaction.accountId = accountId;
-                transaction.status = status;
+        const handleEditTransactionSubmit = (e) => {
+            e.preventDefault();
+            const transactionId = parseInt(document.getElementById('edit-transaction-id').value);
+            const description = document.getElementById('edit-description').value;
+            const amount = parseFloat(document.getElementById('edit-amount').value);
+            const date = document.getElementById('edit-date').value;
+            const categoryId = parseInt(document.getElementById('edit-category').value);
+            const accountId = parseInt(document.getElementById('edit-account').value);
+            const isPending = document.getElementById('edit-is-pending').checked;
+            
+            const transactionIndex = state.transactions.findIndex(t => t.id === transactionId);
+            if (transactionIndex !== -1) {
+                state.transactions[transactionIndex] = {
+                    ...state.transactions[transactionIndex],
+                    description, amount, date, categoryId, accountId,
+                    status: isPending ? 'pending' : 'completed'
+                };
+                
                 saveState();
+                hideModal('view-edit-modal-overlay');
                 renderActivePage();
             }
         };
 
-        const deleteTransaction = (id) => {
-            state.transactions = state.transactions.filter(t => t.id !== id);
+        const handleCategorySubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('category-name').value.trim();
+            if (!name) return;
+            
+            const newCategory = { id: Date.now(), name };
+            state.categories.push(newCategory);
             saveState();
-            renderActivePage();
+            document.getElementById('category-form').reset();
+            renderCategoriesPage();
         };
 
-        const confirmTransaction = (id) => {
-            const transaction = state.transactions.find(t => t.id === id);
+        const handleAccountSubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('account-name').value.trim();
+            const initialBalance = parseFloat(document.getElementById('account-initial-balance').value) || 0;
+            if (!name) return;
+            
+            const newAccount = { id: Date.now(), name, initialBalance };
+            state.accounts.push(newAccount);
+            saveState();
+            document.getElementById('account-form').reset();
+            renderAccountsPage();
+        };
+
+        const handleConfirmTransaction = (transactionId) => {
+            const transaction = state.transactions.find(t => t.id === transactionId);
             if (transaction) {
                 transaction.status = 'completed';
                 saveState();
@@ -972,170 +801,316 @@
             }
         };
 
-        // --- DROPDOWN MANAGEMENT ---
-        const updateCategoryDropdowns = () => {
-            const categorySelect = document.getElementById('category');
-            const editCategorySelect = document.getElementById('edit-category');
-            
-            if (categorySelect) {
-                categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
-                state.categories.forEach(category => {
-                    categorySelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
-                });
-            }
-            
-            if (editCategorySelect) {
-                editCategorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
-                state.categories.forEach(category => {
-                    editCategorySelect.innerHTML += `<option value="${category.id}">${category.name}</option>`;
-                });
+        const handleDeleteTransaction = (transactionId) => {
+            if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                state.transactions = state.transactions.filter(t => t.id !== transactionId);
+                saveState();
+                renderActivePage();
+                hideModal('view-edit-modal-overlay');
             }
         };
 
-        const updateAccountDropdowns = () => {
-            const accountSelect = document.getElementById('account');
-            const editAccountSelect = document.getElementById('edit-account');
-            
-            if (accountSelect) {
-                accountSelect.innerHTML = '<option value="">Selecione uma conta</option>';
-                state.accounts.forEach(account => {
-                    accountSelect.innerHTML += `<option value="${account.id}">${account.name}</option>`;
-                });
-            }
-            
-            if (editAccountSelect) {
-                editAccountSelect.innerHTML = '<option value="">Selecione uma conta</option>';
-                state.accounts.forEach(account => {
-                    editAccountSelect.innerHTML += `<option value="${account.id}">${account.name}</option>`;
-                });
+        const handleDeleteCategory = (categoryId) => {
+            if (confirm('Tem certeza que deseja excluir esta categoria?')) {
+                state.categories = state.categories.filter(c => c.id !== categoryId);
+                saveState();
+                renderCategoriesPage();
             }
         };
 
-        // Atualizar dropdown de categorias nos filtros
-        const updateCategoryFilter = () => {
-            const categoryFilter = document.getElementById('filter-category');
-            if (categoryFilter) {
-                categoryFilter.innerHTML = '<option value="all">Todas</option>';
-                state.categories.forEach(category => {
-                    categoryFilter.innerHTML += `<option value="${category.id}">${category.name}</option>`;
-                });
+        const handleDeleteAccount = (accountId) => {
+            if (confirm('Tem certeza que deseja excluir esta conta?')) {
+                state.accounts = state.accounts.filter(a => a.id !== accountId);
+                saveState();
+                renderAccountsPage();
             }
         };
 
-        // --- MODAL MANAGEMENT ---
-        const openAddModal = () => {
-            document.getElementById('add-modal-overlay').classList.add('active');
-            document.getElementById('date').valueAsDate = new Date();
-            updateCategoryDropdowns();
-            updateAccountDropdowns();
+        // --- BACKUP FUNCTIONS ---
+        const handleBackup = () => {
+            const data = {
+                transactions: state.transactions,
+                categories: state.categories,
+                accounts: state.accounts,
+                backupDate: new Date().toISOString()
+            };
             
-            // Resetar seletor de tipo para receita
-            document.querySelectorAll('.transaction-type-selector .transaction-type-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector('.transaction-type-btn.income').classList.add('active');
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup-financeiro-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Backup realizado com sucesso!');
         };
 
-        const closeAddModal = () => {
-            document.getElementById('add-modal-overlay').classList.remove('active');
-            document.getElementById('transaction-form').reset();
+        const handleDownloadAllData = () => {
+            const data = {
+                transactions: state.transactions,
+                categories: state.categories,
+                accounts: state.accounts,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dados-financeiros-completos-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         };
 
-        const openViewEditModal = (id) => {
-            const transaction = state.transactions.find(t => t.id === id);
-            if (transaction) {
-                document.getElementById('edit-transaction-id').value = transaction.id;
-                document.getElementById('edit-description').value = transaction.description;
-                document.getElementById('edit-amount').value = Math.abs(transaction.amount);
-                document.getElementById('edit-date').value = transaction.date;
-                document.getElementById('edit-is-pending').checked = transaction.status === 'pending';
-                
-                // Configurar seletor de tipo baseado no valor da transação
-                const typeSelector = document.querySelectorAll('#view-edit-modal-overlay .transaction-type-btn');
-                typeSelector.forEach(btn => btn.classList.remove('active'));
-                
-                if (transaction.amount > 0) {
-                    document.querySelector('#view-edit-modal-overlay .transaction-type-btn.income').classList.add('active');
-                } else {
-                    document.querySelector('#view-edit-modal-overlay .transaction-type-btn.expense').classList.add('active');
+        const handleRestore = () => {
+            const fileInput = document.getElementById('restore-file');
+            const file = fileInput.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.transactions && data.categories && data.accounts) {
+                        if (confirm('Esta ação irá substituir todos os dados atuais. Deseja continuar?')) {
+                            state.transactions = data.transactions;
+                            state.categories = data.categories;
+                            state.accounts = data.accounts;
+                            saveState();
+                            renderActivePage();
+                            document.getElementById('restore-status').textContent = 'Dados restaurados com sucesso!';
+                            document.getElementById('restore-btn').disabled = true;
+                            fileInput.value = '';
+                        }
+                    } else {
+                        alert('Arquivo de backup inválido.');
+                    }
+                } catch (error) {
+                    alert('Erro ao processar o arquivo de backup.');
                 }
-                
-                updateCategoryDropdowns();
-                updateAccountDropdowns();
-                
-                document.getElementById('edit-category').value = transaction.categoryId;
-                document.getElementById('edit-account').value = transaction.accountId;
-                
-                document.getElementById('view-edit-modal-overlay').classList.add('active');
-            }
+            };
+            reader.readAsText(file);
         };
 
-        const closeViewEditModal = () => {
-            document.getElementById('view-edit-modal-overlay').classList.remove('active');
+        const handleChooseFile = () => {
+            document.getElementById('restore-file').click();
+        };
+
+        const handleFileSelected = () => {
+            const fileInput = document.getElementById('restore-file');
+            document.getElementById('restore-btn').disabled = !fileInput.files.length;
+            document.getElementById('restore-status').textContent = fileInput.files.length 
+                ? `Arquivo selecionado: ${fileInput.files[0].name}` 
+                : '';
+        };
+
+        const handleDownloadReceipt = () => {
+            const transactionId = parseInt(document.getElementById('edit-transaction-id').value);
+            const transaction = state.transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
+            
+            const category = state.categories.find(c => c.id === transaction.categoryId)?.name || 'Sem categoria';
+            const account = state.accounts.find(a => a.id === transaction.accountId)?.name || 'Sem conta';
+            const date = new Date(transaction.date).toLocaleDateString('pt-BR');
+            
+            const receiptContent = `
+                <html>
+                <head><title>Recibo - ${transaction.description}</title></head>
+                <body style="font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px;">
+                    <h2 style="text-align: center; color: #333;">RECIBO</h2>
+                    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+                    <div style="margin-bottom: 15px;">
+                        <strong>Descrição:</strong> ${transaction.description}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Valor:</strong> ${formatCurrency(transaction.amount)}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Data:</strong> ${date}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Categoria:</strong> ${category}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Conta:</strong> ${account}
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Status:</strong> ${transaction.status === 'pending' ? 'Pendente' : 'Concluída'}
+                    </div>
+                    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+                    <div style="text-align: center; font-size: 12px; color: #777;">
+                        Gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([receiptContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `recibo-${transaction.description.replace(/\s+/g, '-').toLowerCase()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        const handleDownloadReport = () => {
+            const now = new Date();
+            const startDate = document.getElementById('start-date').value || `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-01`;
+            const endDate = document.getElementById('end-date').value || `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            
+            const filteredTrans = state.transactions.filter(t => {
+                const tDate = new Date(t.date);
+                const sDate = new Date(startDate);
+                const eDate = new Date(endDate);
+                return t.status === 'completed' && tDate >= sDate && tDate <= eDate;
+            });
+            
+            const income = filteredTrans.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+            const expense = filteredTrans.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0);
+            const balance = income + expense;
+            
+            const reportContent = `
+                <html>
+                <head><title>Relatório Financeiro</title></head>
+                <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="text-align: center; color: #333;">RELATÓRIO FINANCEIRO</h2>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Período:</strong> ${new Date(startDate).toLocaleDateString('pt-BR')} a ${new Date(endDate).toLocaleDateString('pt-BR')}
+                    </div>
+                    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+                    <h3 style="color: #333;">Resumo</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tr style="background-color: #f5f5f5;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Receitas</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formatCurrency(income)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Despesas</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formatCurrency(Math.abs(expense))}</td>
+                        </tr>
+                        <tr style="background-color: #f5f5f5;">
+                            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Saldo</strong></td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formatCurrency(balance)}</td>
+                        </tr>
+                    </table>
+                    <h3 style="color: #333;">Transações</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #f5f5f5;">
+                                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Data</th>
+                                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Descrição</th>
+                                <th style="padding: 10px; border: 1px solid #ddd; text-align: right;">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredTrans.map(t => `
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">${new Date(t.date).toLocaleDateString('pt-BR')}</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd;">${t.description}</td>
+                                    <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${formatCurrency(t.amount)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <hr style="border: 1px solid #ddd; margin: 20px 0;">
+                    <div style="text-align: center; font-size: 12px; color: #777;">
+                        Gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([reportContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `relatorio-financeiro-${new Date().toISOString().split('T')[0]}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         };
 
         // --- EVENT LISTENERS ---
-        const setupEventListeners = () => {
-            // Navigation
-            selectors.navLinks.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
-                    e.preventDefault();
-                    const link = e.target.tagName === 'A' ? e.target : e.target.parentElement;
-                    const pageId = link.dataset.page;
-                    if (pageId) navigateTo(pageId);
+        selectors.navLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
+                const link = e.target.closest('a');
+                if (link && link.dataset.page) {
+                    navigateTo(link.dataset.page);
                 }
-            });
+            }
+        });
 
-            // Mobile menu
-            selectors.menuToggleBtn.addEventListener('click', () => {
-                selectors.sidebar.classList.toggle('open');
-                selectors.sidebarOverlay.classList.toggle('active');
-            });
+        selectors.menuToggleBtn.addEventListener('click', () => {
+            selectors.sidebar.classList.toggle('open');
+            selectors.sidebarOverlay.classList.toggle('active');
+        });
 
-            selectors.sidebarOverlay.addEventListener('click', () => {
-                selectors.sidebar.classList.remove('open');
-                selectors.sidebarOverlay.classList.remove('active');
-            });
+        selectors.sidebarOverlay.addEventListener('click', () => {
+            selectors.sidebar.classList.remove('open');
+            selectors.sidebarOverlay.classList.remove('active');
+        });
 
-            // FAB and modals
-            document.getElementById('fab-add-btn').addEventListener('click', openAddModal);
-            document.getElementById('cancel-add-btn').addEventListener('click', closeAddModal);
-            document.getElementById('cancel-edit-btn').addEventListener('click', closeViewEditModal);
+        document.getElementById('fab-add-btn').addEventListener('click', openAddModal);
+        document.getElementById('transaction-form').addEventListener('submit', handleTransactionSubmit);
+        document.getElementById('edit-transaction-form').addEventListener('submit', handleEditTransactionSubmit);
+        document.getElementById('category-form').addEventListener('submit', handleCategorySubmit);
+        document.getElementById('account-form').addEventListener('submit', handleAccountSubmit);
+        document.getElementById('cancel-add-btn').addEventListener('click', () => hideModal('add-modal-overlay'));
+        document.getElementById('cancel-edit-btn').addEventListener('click', () => hideModal('view-edit-modal-overlay'));
+        document.getElementById('delete-from-modal-btn').addEventListener('click', () => {
+            const transactionId = parseInt(document.getElementById('edit-transaction-id').value);
+            handleDeleteTransaction(transactionId);
+        });
+        document.getElementById('download-receipt-btn').addEventListener('click', handleDownloadReceipt);
+        document.getElementById('backup-btn').addEventListener('click', handleBackup);
+        document.getElementById('download-all-btn').addEventListener('click', handleDownloadAllData);
+        document.getElementById('choose-file-btn').addEventListener('click', handleChooseFile);
+        document.getElementById('restore-file').addEventListener('change', handleFileSelected);
+        document.getElementById('restore-btn').addEventListener('click', handleRestore);
+        document.getElementById('download-report-btn').addEventListener('click', handleDownloadReport);
+
+        // Delegated event listeners
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('confirm-btn') || e.target.parentElement.classList.contains('confirm-btn')) {
+                const btn = e.target.classList.contains('confirm-btn') ? e.target : e.target.parentElement;
+                handleConfirmTransaction(parseInt(btn.dataset.id));
+            }
             
-            document.getElementById('delete-from-modal-btn').addEventListener('click', () => {
-                const id = parseInt(document.getElementById('edit-transaction-id').value);
-                deleteTransaction(id);
-                closeViewEditModal();
-            });
+            if (e.target.classList.contains('edit-btn') || e.target.parentElement.classList.contains('edit-btn')) {
+                const btn = e.target.classList.contains('edit-btn') ? e.target : e.target.parentElement;
+                openEditModal(parseInt(btn.dataset.id));
+            }
+            
+            if (e.target.classList.contains('delete-category-btn') || e.target.parentElement.classList.contains('delete-category-btn')) {
+                const btn = e.target.classList.contains('delete-category-btn') ? e.target : e.target.parentElement;
+                handleDeleteCategory(parseInt(btn.dataset.id));
+            }
+            
+            if (e.target.classList.contains('delete-account-btn') || e.target.parentElement.classList.contains('delete-account-btn')) {
+                const btn = e.target.classList.contains('delete-account-btn') ? e.target : e.target.parentElement;
+                handleDeleteAccount(parseInt(btn.dataset.id));
+            }
+            
+            if (e.target.classList.contains('list-item') && !e.target.classList.contains('delete-btn') && !e.target.classList.contains('confirm-btn') && !e.target.classList.contains('edit-btn')) {
+                const transactionId = parseInt(e.target.closest('.list-item').dataset.id);
+                if (transactionId) openEditModal(transactionId);
+            }
+        });
 
-            // Seletores de tipo de transação
-            document.querySelectorAll('.transaction-type-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const parent = this.closest('.transaction-type-selector');
-                    parent.querySelectorAll('.transaction-type-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Filtros do dashboard
-            document.getElementById('search-transactions').addEventListener('input', renderDashboard);
-            document.getElementById('filter-type').addEventListener('change', renderDashboard);
-            document.getElementById('filter-category').addEventListener('change', renderDashboard);
-            document.getElementById('filter-date').addEventListener('change', renderDashboard);
-        };
-
-        // --- INITIALIZATION ---
-        const init = () => {
-            initializeData();
-            setupEventListeners();
-            setupFormHandlers();
-            updateCategoryDropdowns();
-            updateAccountDropdowns();
-            updateCategoryFilter();
-            navigateTo(state.activePage);
-        };
-
-        init();
+        // Initialize the application
+        initializeData();
+        populateSelectOptions();
+        navigateTo(state.activePage);
     });
     </script>
 </body>
