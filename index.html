@@ -16,11 +16,11 @@
 
     <style>
         :root {
-            --primary-color: #5636D3; --secondary-color: #FF872C; --success-color: #12A454;
-            --danger-color: #E83F5B; --pending-color: #4B90F7; --background-color: #F0F2F5;
-            --text-color: #363F5F; --text-light-color: #969CB2; --card-bg-color: #FFFFFF;
-            --border-radius: 8px; --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            --recurring-color: #9C27B0; --fixed-color: #FF9800; --credit-card-color: #2196F3;
+            --primary-color: #6C63FF; --secondary-color: #FF6584; --success-color: #4CAF50; 
+            --danger-color: #F44336; --pending-color: #FF9800; --background-color: #F5F7FF;
+            --text-color: #2D3748; --text-light-color: #718096; --card-bg-color: #FFFFFF;
+            --border-radius: 12px; --box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            --recurring-color: #9C27B0; --credit-card-color: #2196F3;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); display: flex; }
@@ -43,36 +43,27 @@
 
         /* --- Elementos Comuns --- */
         .card { background-color: var(--card-bg-color); padding: 1.5rem 2rem; border-radius: var(--border-radius); box-shadow: var(--box-shadow); }
-        .btn { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.3s ease; }
+        .btn { padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s ease; }
         .btn.primary { background-color: var(--primary-color); color: white; }
         .btn.secondary { background-color: #e0e0e0; color: var(--text-color); }
         .btn.success { background-color: var(--success-color); color: white; }
         .btn.danger { background-color: var(--danger-color); color: white; }
         .btn.download { background-color: var(--pending-color); color: white; }
         .btn.recurring { background-color: var(--recurring-color); color: white; }
-        .btn.fixed { background-color: var(--fixed-color); color: white; }
-        .btn.credit-card { background-color: var(--credit-card-color); color: white; }
         .list-item { background-color: var(--card-bg-color); padding: 1rem 1.5rem; margin-bottom: 0.5rem; border-radius: var(--border-radius); display: flex; align-items: center; justify-content: space-between; position: relative; cursor: pointer; transition: background-color 0.2s ease; }
         .list-item:hover { background-color: #f8f9fa; }
         .list-item:hover .delete-btn { opacity: 1; }
         .delete-btn { background: none; border: none; color: var(--danger-color); cursor: pointer; font-size: 1rem; opacity: 0; transition: opacity 0.3s ease; z-index: 5; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .transaction-type-selector { display: flex; border-radius: 5px; overflow: hidden; margin-bottom: 1rem; }
-        .transaction-type-selector button { flex: 1; padding: 12px; border: none; background-color: #e0e0e0; color: var(--text-color); font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
-        .transaction-type-selector button.active { background-color: var(--primary-color); color: white; }
-        .transaction-type-selector button.income.active { background-color: var(--success-color); }
-        .transaction-type-selector button.expense.active { background-color: var(--danger-color); }
-        .transaction-badge { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 500; margin-left: 8px; }
+        .transaction-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; margin-left: 8px; }
         .badge-recurring { background-color: var(--recurring-color); color: white; }
-        .badge-fixed { background-color: var(--fixed-color); color: white; }
         .badge-credit { background-color: var(--credit-card-color); color: white; }
-        .badge-pending { background-color: var(--pending-color); color: white; }
 
         /* --- Dashboard --- */
         #dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 2rem; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; color: var(--text-light-color); }
         .card-header i { font-size: 1.8rem; }
-        #dashboard-cards .balance i { color: var(--secondary-color); }
+        #dashboard-cards .balance i { color: var(--primary-color); }
         #dashboard-cards .income i { color: var(--success-color); }
         #dashboard-cards .expense i { color: var(--danger-color); }
         .card p { font-size: 2rem; font-weight: 500; }
@@ -121,7 +112,7 @@
         .fab { position: fixed; bottom: 2rem; right: 3rem; width: 60px; height: 60px; background-color: var(--primary-color); color: white; border: none; border-radius: 50%; font-size: 2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.2); cursor: pointer; z-index: 101; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 102; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content { background-color: var(--card-bg-color); padding: 2rem; border-radius: var(--border-radius); width: 90%; max-width: 500px; position: relative; }
+        .modal-content { background-color: var(--card-bg-color); padding: 2rem; border-radius: var(--border-radius); width: 90%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto; }
         .modal-content h3 { margin-bottom: 1.5rem; }
         .form-control { margin-bottom: 1rem; }
         .form-control label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
@@ -129,8 +120,11 @@
         .modal-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
         .modal-actions .spacer { flex-grow: 1; }
         .form-switch { display: flex; align-items: center; gap: 10px; }
-        .transaction-options { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
-        .transaction-options .btn { flex: 1; min-width: 120px; }
+        .transaction-type-selector { display: flex; gap: 10px; margin-bottom: 1rem; }
+        .transaction-type-btn { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; background: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+        .transaction-type-btn.active { border-color: var(--primary-color); background-color: rgba(108, 99, 255, 0.1); color: var(--primary-color); }
+        .transaction-type-btn.income.active { border-color: var(--success-color); background-color: rgba(76, 175, 80, 0.1); color: var(--success-color); }
+        .transaction-type-btn.expense.active { border-color: var(--danger-color); background-color: rgba(244, 67, 54, 0.1); color: var(--danger-color); }
 
         /* --- Header Mobile --- */
         .mobile-header { display: none; align-items: center; gap: 1rem; padding: 1rem 1.5rem; background-color: var(--card-bg-color); box-shadow: var(--box-shadow); margin-bottom: 1.5rem; }
@@ -151,7 +145,7 @@
             .fab { right: 1.5rem; bottom: 1.5rem; }
             .list-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
             .list-item-actions { width: 100%; justify-content: flex-end; }
-            .transaction-options .btn { min-width: 100%; }
+            .transaction-type-selector { flex-direction: column; }
         }
 
     </style>
@@ -210,10 +204,7 @@
                 <form id="account-form">
                     <div class="form-control"><label for="account-name">Nome da Conta</label><input type="text" id="account-name" required></div>
                     <div class="form-control"><label for="account-initial-balance">Saldo Inicial</label><input type="number" id="account-initial-balance" step="0.01" value="0" required></div>
-                    <div class="form-control form-switch">
-                        <input type="checkbox" id="is-credit-card" style="width: auto;">
-                        <label for="is-credit-card">Esta conta é um cartão de crédito</label>
-                    </div>
+                    <div class="form-control form-switch"><input type="checkbox" id="account-is-credit" style="width: auto;"><label for="account-is-credit">Cartão de Crédito</label></div>
                     <button type="submit" class="btn primary">Adicionar</button>
                 </form>
             </div>
@@ -238,37 +229,27 @@
         <div class="modal-content">
             <h3>Nova Transação</h3>
             <div class="transaction-type-selector">
-                <button type="button" class="income active" data-type="income">Receita</button>
-                <button type="button" class="expense" data-type="expense">Despesa</button>
+                <button type="button" class="transaction-type-btn income active" data-type="income">Receita</button>
+                <button type="button" class="transaction-type-btn expense" data-type="expense">Despesa</button>
             </div>
             <form id="transaction-form">
                 <div class="form-control"><label for="description">Descrição</label><input type="text" id="description" required></div>
                 <div class="form-grid">
-                    <div class="form-control"><label for="amount">Valor</label><input type="number" id="amount" placeholder="Ex: 50,00" step="0.01" min="0" required></div>
+                    <div class="form-control"><label for="amount">Valor</label><input type="number" id="amount" placeholder="Ex: 50,00" step="0.01" required></div>
                     <div class="form-control"><label for="date">Data</label><input type="date" id="date" required></div>
                 </div>
                 <div class="form-grid">
                     <div class="form-control"><label for="category">Categoria</label><select id="category" required></select></div>
                     <div class="form-control"><label for="account">Conta</label><select id="account" required></select></div>
                 </div>
-                <div class="transaction-options">
-                    <button type="button" class="btn recurring" id="toggle-recurring">Recorrente</button>
-                    <button type="button" class="btn fixed" id="toggle-fixed">Fixa</button>
-                </div>
-                <div id="recurring-options" style="display: none;">
-                    <div class="form-control">
-                        <label for="recurrence-frequency">Frequência</label>
-                        <select id="recurrence-frequency">
-                            <option value="weekly">Semanal</option>
-                            <option value="monthly" selected>Mensal</option>
-                            <option value="quarterly">Trimestral</option>
-                            <option value="yearly">Anual</option>
-                        </select>
-                    </div>
-                    <div class="form-control">
-                        <label for="recurrence-end-date">Data Final (opcional)</label>
-                        <input type="date" id="recurrence-end-date">
-                    </div>
+                <div class="form-control form-switch"><input type="checkbox" id="is-recurring" style="width: auto;"><label for="is-recurring">Transação recorrente</label></div>
+                <div class="form-control" id="recurring-options" style="display: none;">
+                    <label for="recurring-frequency">Frequência</label>
+                    <select id="recurring-frequency">
+                        <option value="monthly">Mensal</option>
+                        <option value="quarterly">Trimestral</option>
+                        <option value="yearly">Anual</option>
+                    </select>
                 </div>
                 <div class="form-control form-switch"><input type="checkbox" id="is-pending" style="width: auto;"><label for="is-pending">Marcar como pendente</label></div>
                 <div class="modal-actions"><button type="button" class="btn secondary" id="cancel-add-btn">Cancelar</button><button type="submit" class="btn primary">Salvar</button></div>
@@ -283,12 +264,21 @@
                 <input type="hidden" id="edit-transaction-id">
                 <div class="form-control"><label for="edit-description">Descrição</label><input type="text" id="edit-description" required></div>
                 <div class="form-grid">
-                    <div class="form-control"><label for="edit-amount">Valor</label><input type="number" id="edit-amount" placeholder="Ex: 50,00" step="0.01" min="0" required></div>
+                    <div class="form-control"><label for="edit-amount">Valor</label><input type="number" id="edit-amount" placeholder="Ex: 50,00" step="0.01" required></div>
                     <div class="form-control"><label for="edit-date">Data</label><input type="date" id="edit-date" required></div>
                 </div>
                 <div class="form-grid">
                     <div class="form-control"><label for="edit-category">Categoria</label><select id="edit-category" required></select></div>
                     <div class="form-control"><label for="edit-account">Conta</label><select id="edit-account" required></select></div>
+                </div>
+                <div class="form-control form-switch"><input type="checkbox" id="edit-is-recurring" style="width: auto;"><label for="edit-is-recurring">Transação recorrente</label></div>
+                <div class="form-control" id="edit-recurring-options" style="display: none;">
+                    <label for="edit-recurring-frequency">Frequência</label>
+                    <select id="edit-recurring-frequency">
+                        <option value="monthly">Mensal</option>
+                        <option value="quarterly">Trimestral</option>
+                        <option value="yearly">Anual</option>
+                    </select>
                 </div>
                 <div class="form-control form-switch"><input type="checkbox" id="edit-is-pending" style="width: auto;"><label for="edit-is-pending">Transação pendente</label></div>
                 <div class="modal-actions">
@@ -325,40 +315,40 @@
         const initializeData = () => {
             const migrateAndLoad = (key, defaultData) => {
                 let data = JSON.parse(localStorage.getItem(key)) || defaultData;
-                if (key === 'app_accounts_v2' && data.length > 0 && data[0].initialBalance === undefined) {
-                    data.forEach(acc => acc.initialBalance = 0);
+                if (key === 'app_accounts_v3' && data.length > 0 && data[0].isCredit === undefined) {
+                    data.forEach(acc => acc.isCredit = false);
                 }
-                if (key === 'app_transactions_v2' && data.length > 0 && data[0].status === undefined) {
-                    data.forEach(t => t.status = 'completed');
-                }
-                // Migração para novos campos
-                if (key === 'app_transactions_v2' && data.length > 0 && data[0].type === undefined) {
+                if (key === 'app_transactions_v3' && data.length > 0 && data[0].isRecurring === undefined) {
                     data.forEach(t => {
-                        t.type = t.amount >= 0 ? 'income' : 'expense';
-                        t.amount = Math.abs(t.amount);
                         t.isRecurring = false;
-                        t.isFixed = false;
-                        t.recurrence = null;
+                        t.recurringFrequency = null;
                     });
-                }
-                if (key === 'app_accounts_v2' && data.length > 0 && data[0].isCreditCard === undefined) {
-                    data.forEach(acc => acc.isCreditCard = false);
                 }
                 return data;
             };
 
-            state.transactions = migrateAndLoad('app_transactions_v2', []);
-            state.categories = migrateAndLoad('app_categories_v2', [{ id: 1, name: 'Salário' }, { id: 2, name: 'Alimentação' }]);
-            state.accounts = migrateAndLoad('app_accounts_v2', [{ id: 1, name: 'Carteira', initialBalance: 0, isCreditCard: false }]);
+            state.transactions = migrateAndLoad('app_transactions_v3', []);
+            state.categories = migrateAndLoad('app_categories_v3', [
+                { id: 1, name: 'Salário' }, 
+                { id: 2, name: 'Alimentação' },
+                { id: 3, name: 'Transporte' },
+                { id: 4, name: 'Moradia' },
+                { id: 5, name: 'Lazer' }
+            ]);
+            state.accounts = migrateAndLoad('app_accounts_v3', [
+                { id: 1, name: 'Carteira', initialBalance: 0, isCredit: false },
+                { id: 2, name: 'Conta Corrente', initialBalance: 0, isCredit: false },
+                { id: 3, name: 'Cartão de Crédito', initialBalance: 0, isCredit: true }
+            ]);
             
             const lastPage = localStorage.getItem('app_activePage');
             state.activePage = lastPage || 'dashboard-page';
         };
         
         const saveState = () => {
-            localStorage.setItem('app_transactions_v2', JSON.stringify(state.transactions));
-            localStorage.setItem('app_categories_v2', JSON.stringify(state.categories));
-            localStorage.setItem('app_accounts_v2', JSON.stringify(state.accounts));
+            localStorage.setItem('app_transactions_v3', JSON.stringify(state.transactions));
+            localStorage.setItem('app_categories_v3', JSON.stringify(state.categories));
+            localStorage.setItem('app_accounts_v3', JSON.stringify(state.accounts));
             localStorage.setItem('app_activePage', state.activePage);
         };
         
@@ -386,18 +376,18 @@
             const account = state.accounts.find(a => a.id === accountId);
             if (!account) return 0;
             
-            // Para cartão de crédito, mostramos o saldo disponível (limite - despesas)
-            if (account.isCreditCard) {
-                const creditCardExpenses = state.transactions
-                    .filter(t => t.accountId === accountId && t.status === 'completed' && t.type === 'expense')
+            // Se for cartão de crédito, mostramos o saldo negativo
+            if (account.isCredit) {
+                const creditTransactions = state.transactions
+                    .filter(t => t.accountId === accountId && t.status === 'completed')
                     .reduce((sum, t) => sum + t.amount, 0);
-                return (account.initialBalance || 0) - creditCardExpenses;
+                return creditTransactions; // Para cartão de crédito, mostramos o valor gasto
             }
             
-            // Para contas normais
+            // Para outras contas, mostramos o saldo real
             const totalTransactions = state.transactions
                 .filter(t => t.accountId === accountId && t.status === 'completed')
-                .reduce((sum, t) => sum + (t.type === 'income' ? t.amount : -t.amount), 0);
+                .reduce((sum, t) => sum + t.amount, 0);
             return (account.initialBalance || 0) + totalTransactions;
         };
 
@@ -407,29 +397,26 @@
                 const tDate = new Date(t.date);
                 return t.status === 'completed' && tDate.getMonth() === now.getMonth() && tDate.getFullYear() === now.getFullYear();
             });
-            const monthlyIncome = monthlyTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const monthlyExpense = monthlyTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const monthlyIncome = monthlyTrans.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+            const monthlyExpense = monthlyTrans.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0);
             const totalBalance = state.accounts.reduce((sum, acc) => sum + getAccountBalance(acc.id), 0);
 
             document.getElementById('balance-display').textContent = formatCurrency(totalBalance);
             document.getElementById('income-display').textContent = formatCurrency(monthlyIncome);
-            document.getElementById('expense-display').textContent = formatCurrency(monthlyExpense);
+            document.getElementById('expense-display').textContent = formatCurrency(Math.abs(monthlyExpense));
 
             const accList = document.getElementById('account-balances-list');
             accList.innerHTML = state.accounts.map(acc => {
                 const balance = getAccountBalance(acc.id);
-                const icon = acc.isCreditCard ? 'fa-credit-card' : 'fa-landmark';
-                const balanceText = acc.isCreditCard ? 
-                    `${formatCurrency(balance)} de ${formatCurrency(acc.initialBalance || 0)}` : 
-                    formatCurrency(balance);
-                
                 return `
                 <div class="account-card">
                     <div class="account-card-header">
-                        <i class="fa-solid ${icon}"></i>
-                        <span>${acc.name}${acc.isCreditCard ? ' (Cartão)' : ''}</span>
+                        <i class="fa-solid ${acc.isCredit ? 'fa-credit-card' : 'fa-landmark'}"></i>
+                        <span>${acc.name}</span>
                     </div>
-                    <p class="account-card-balance" style="color: ${balance < 0 ? 'var(--danger-color)' : 'inherit'}">${balanceText}</p>
+                    <p class="account-card-balance" style="color: ${balance < 0 ? 'var(--danger-color)' : 'var(--text-color)'}">
+                        ${formatCurrency(balance)}
+                    </p>
                 </div>`;
             }).join('');
 
@@ -472,151 +459,103 @@
              if(items.length === 0) {
                  listEl.innerHTML = `<li class="list-item" style="cursor: default; justify-content: center;">Nenhuma conta cadastrada.</li>`; return;
             }
-            listEl.innerHTML = items.map(account => {
-                const balance = getAccountBalance(account.id);
-                const icon = account.isCreditCard ? 'fa-credit-card' : 'fa-landmark';
-                const balanceText = account.isCreditCard ? 
-                    `${formatCurrency(balance)} de ${formatCurrency(account.initialBalance || 0)}` : 
-                    formatCurrency(balance);
-                
-                return `
+            listEl.innerHTML = items.map(account => `
                 <li class="list-item" style="cursor: default;">
                     <div class="list-item-main">
-                        <i class="fa-solid ${icon}"></i>
-                        <span>${account.name}${account.isCreditCard ? ' (Cartão)' : ''}</span>
+                        <i class="fa-solid ${account.isCredit ? 'fa-credit-card' : 'fa-landmark'}"></i>
+                        <span>${account.name}</span>
+                        ${account.isCredit ? '<span class="transaction-badge badge-credit">Cartão</span>' : ''}
                     </div>
                     <div class="list-item-actions">
-                        <span style="margin-right: 1rem; color: ${balance < 0 ? 'var(--danger-color)' : 'inherit'}">${balanceText}</span>
-                        <button class="delete-btn" onclick="app.removeAccount(${account.id})"><i class="fa-solid fa-trash"></i></button>
+                         <span style="font-weight: 500; color: ${getAccountBalance(account.id) < 0 ? 'var(--danger-color)' : 'var(--text-color)'};">${formatCurrency(getAccountBalance(account.id))}</span>
+                         <button class="delete-btn" onclick="app.removeAccount(${account.id})" style="opacity:1;"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                </li>`;
-            }).join('');
-        };
-
+                </li>
+            `).join('');
+        }
+        
+        let charts = { expense: null, flow: null };
         const renderReports = () => {
-            const now = new Date();
-            const startDate = document.getElementById('start-date').value || new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
-            const endDate = document.getElementById('end-date').value || new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+            // Implementação dos gráficos permanece a mesma
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
             
-            const filteredTrans = state.transactions.filter(t => {
-                const tDate = new Date(t.date);
-                return t.status === 'completed' && t.date >= startDate && t.date <= endDate;
-            });
+            // Filtra transações por período
+            let filteredTransactions = [...state.transactions];
+            if (startDate && endDate) {
+                filteredTransactions = filteredTransactions.filter(t => {
+                    const tDate = new Date(t.date);
+                    return tDate >= new Date(startDate) && tDate <= new Date(endDate);
+                });
+            }
             
-            const income = filteredTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const expense = filteredTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const balance = income - expense;
+            const completedTrans = filteredTransactions.filter(t => t.status === 'completed');
+            const income = completedTrans.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+            const expense = completedTrans.filter(t => t.amount < 0).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+            const net = income - expense;
             
-            document.getElementById('report-summary').innerHTML = `
-                <div class="card report-card"><div class="card-header"><span>Receitas</span><i class="fa-solid fa-arrow-up" style="color: var(--success-color);"></i></div><p>${formatCurrency(income)}</p></div>
-                <div class="card report-card"><div class="card-header"><span>Despesas</span><i class="fa-solid fa-arrow-down" style="color: var(--danger-color);"></i></div><p>${formatCurrency(expense)}</p></div>
-                <div class="card report-card"><div class="card-header"><span>Saldo</span><i class="fa-solid fa-dollar-sign" style="color: ${balance >= 0 ? 'var(--success-color)' : 'var(--danger-color)'};"></i></div><p>${formatCurrency(balance)}</p></div>
+            const reportSummary = document.getElementById('report-summary');
+            reportSummary.innerHTML = `
+                <div class="report-card card income"><div class="card-header"><span>Receitas</span><i class="fa-solid fa-arrow-up"></i></div><p>${formatCurrency(income)}</p></div>
+                <div class="report-card card expense"><div class="card-header"><span>Despesas</span><i class="fa-solid fa-arrow-down"></i></div><p>${formatCurrency(expense)}</p></div>
+                <div class="report-card card balance"><div class="card-header"><span>Saldo</span><i class="fa-solid fa-dollar-sign"></i></div><p style="color: ${net >= 0 ? 'var(--success-color)' : 'var(--danger-color)'}">${formatCurrency(net)}</p></div>
             `;
             
-            renderExpenseChart(filteredTrans);
-            renderFlowChart(filteredTrans, startDate, endDate);
-        };
-
-        const renderExpenseChart = (transactions) => {
-            const ctx = document.getElementById('expense-chart').getContext('2d');
-            const expenseTrans = transactions.filter(t => t.type === 'expense');
-            const categoryTotals = {};
-            expenseTrans.forEach(t => {
-                const cat = state.categories.find(c => c.id === t.categoryId)?.name || 'Outros';
-                categoryTotals[cat] = (categoryTotals[cat] || 0) + t.amount;
+            // Gráfico de Despesas por Categoria
+            const expenseByCategory = {};
+            completedTrans.filter(t => t.amount < 0).forEach(t => {
+                const catName = state.categories.find(c => c.id === t.categoryId)?.name || 'Outros';
+                expenseByCategory[catName] = (expenseByCategory[catName] || 0) + Math.abs(t.amount);
             });
             
-            const labels = Object.keys(categoryTotals);
-            const data = Object.values(categoryTotals);
-            
-            if(window.expenseChartInstance) window.expenseChartInstance.destroy();
-            window.expenseChartInstance = new Chart(ctx, {
+            const expenseCtx = document.getElementById('expense-chart').getContext('2d');
+            if (charts.expense) charts.expense.destroy();
+            charts.expense = new Chart(expenseCtx, {
                 type: 'pie',
                 data: {
-                    labels,
-                    datasets: [{ data, backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8AC926', '#1982C4', '#6A4C93'] }]
+                    labels: Object.keys(expenseByCategory),
+                    datasets: [{
+                        data: Object.values(expenseByCategory),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8AC926', '#1982C4', '#6A4C93']
+                    }]
                 },
-                options: { responsive: true, plugins: { legend: { position: 'right' } } }
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
             });
-        };
-
-        const renderFlowChart = (transactions, startDate, endDate) => {
-            const ctx = document.getElementById('flow-chart').getContext('2d');
-            const dateMap = {};
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            const daysDiff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
             
-            // Agrupar por período (dia, semana ou mês)
-            const period = daysDiff > 90 ? 'month' : daysDiff > 14 ? 'week' : 'day';
+            // Gráfico de Receitas vs Despesas
+            const flowCtx = document.getElementById('flow-chart').getContext('2d');
+            if (charts.flow) charts.flow.destroy();
             
-            transactions.forEach(t => {
+            // Agrupar por mês
+            const monthlyData = {};
+            completedTrans.forEach(t => {
                 const date = new Date(t.date);
-                let key;
-                if(period === 'month') key = `${date.getFullYear()}-${date.getMonth()+1}`;
-                else if(period === 'week') key = `${date.getFullYear()}-W${Math.ceil((date.getDate() + (new Date(date.getFullYear(), date.getMonth(), 1).getDay() + 1) % 7) / 7)}`;
-                else key = t.date;
-                
-                if(!dateMap[key]) dateMap[key] = { income: 0, expense: 0 };
-                if(t.type === 'income') dateMap[key].income += t.amount;
-                else dateMap[key].expense += t.amount;
+                const monthKey = `${date.getFullYear()}-${date.getMonth()+1}`;
+                if (!monthlyData[monthKey]) monthlyData[monthKey] = { income: 0, expense: 0 };
+                if (t.amount > 0) monthlyData[monthKey].income += t.amount;
+                else monthlyData[monthKey].expense += Math.abs(t.amount);
             });
             
-            const labels = Object.keys(dateMap).sort();
-            const incomeData = labels.map(l => dateMap[l].income);
-            const expenseData = labels.map(l => dateMap[l].expense);
+            const sortedMonths = Object.keys(monthlyData).sort();
+            const monthLabels = sortedMonths.map(m => {
+                const [year, month] = m.split('-');
+                return `${month}/${year}`;
+            });
             
-            if(window.flowChartInstance) window.flowChartInstance.destroy();
-            window.flowChartInstance = new Chart(ctx, {
+            charts.flow = new Chart(flowCtx, {
                 type: 'bar',
                 data: {
-                    labels,
+                    labels: monthLabels,
                     datasets: [
-                        { label: 'Receitas', data: incomeData, backgroundColor: 'rgba(18, 164, 84, 0.7)', borderColor: 'rgba(18, 164, 84, 1)', borderWidth: 1 },
-                        { label: 'Despesas', data: expenseData, backgroundColor: 'rgba(232, 63, 91, 0.7)', borderColor: 'rgba(232, 63, 91, 1)', borderWidth: 1 }
+                        { label: 'Receitas', data: sortedMonths.map(m => monthlyData[m].income), backgroundColor: '#4CAF50' },
+                        { label: 'Despesas', data: sortedMonths.map(m => monthlyData[m].expense), backgroundColor: '#F44336' }
                     ]
                 },
-                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+                options: {
+                    responsive: true,
+                    scales: { y: { beginAtZero: true } }
+                }
             });
-        };
-
-        const createTransactionListItem = (transaction, showActions = false) => {
-            const category = state.categories.find(c => c.id === transaction.categoryId);
-            const account = state.accounts.find(a => a.id === transaction.accountId);
-            const isPending = transaction.status === 'pending';
-            const isRecurring = transaction.isRecurring;
-            const isFixed = transaction.isFixed;
-            const isCreditCard = account?.isCreditCard;
-            
-            const badges = [];
-            if (isRecurring) badges.push('<span class="transaction-badge badge-recurring">Recorrente</span>');
-            if (isFixed) badges.push('<span class="transaction-badge badge-fixed">Fixa</span>');
-            if (isCreditCard) badges.push('<span class="transaction-badge badge-credit">Cartão</span>');
-            if (isPending) badges.push('<span class="transaction-badge badge-pending">Pendente</span>');
-            
-            const badgeHtml = badges.join('');
-            
-            return `
-            <li class="list-item" data-id="${transaction.id}">
-                <div class="transaction-details">
-                    <div class="transaction-status ${isPending ? 'pending' : 'completed'}"></div>
-                    <div class="transaction-info">
-                        <span class="description">${transaction.description}${badgeHtml}</span>
-                        <span class="details">${category?.name || 'Sem categoria'} • ${account?.name || 'Sem conta'} • ${new Date(transaction.date).toLocaleDateString('pt-BR')}</span>
-                    </div>
-                </div>
-                <div class="list-item-actions">
-                    <span class="transaction-amount ${transaction.type}">${transaction.type === 'income' ? '+' : '-'} ${formatCurrency(transaction.amount)}</span>
-                    ${showActions ? `
-                        <div class="pending-actions">
-                            <button class="btn success confirm-btn" onclick="app.confirmTransaction(${transaction.id})">Confirmar</button>
-                            <button class="delete-btn" onclick="app.removeTransaction(${transaction.id})"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    ` : `
-                        <button class="delete-btn" onclick="app.removeTransaction(${transaction.id})"><i class="fa-solid fa-trash"></i></button>
-                    `}
-                </div>
-            </li>`;
         };
 
         const renderActivePage = () => {
@@ -629,283 +568,279 @@
             }
         };
 
+        // --- TRANSACTION LIST ITEM ---
+        const createTransactionListItem = (transaction, showActions = false) => {
+            const category = state.categories.find(c => c.id === transaction.categoryId);
+            const account = state.accounts.find(a => a.id === transaction.accountId);
+            const isIncome = transaction.amount > 0;
+            const amountClass = isIncome ? 'income' : 'expense';
+            
+            let badges = '';
+            if (transaction.isRecurring) badges += '<span class="transaction-badge badge-recurring">Recorrente</span>';
+            if (account && account.isCredit) badges += '<span class="transaction-badge badge-credit">Cartão</span>';
+            
+            return `
+            <li class="list-item" data-id="${transaction.id}">
+                <div class="transaction-details">
+                    <div class="transaction-status ${transaction.status}"></div>
+                    <div class="transaction-info">
+                        <span class="description">${transaction.description}</span>
+                        <span class="details">${category?.name || 'Sem categoria'} • ${account?.name || 'Sem conta'} • ${new Date(transaction.date).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                </div>
+                <div class="list-item-actions">
+                    ${badges}
+                    <span class="transaction-amount ${amountClass}">${formatCurrency(transaction.amount)}</span>
+                    ${showActions ? `
+                    <div class="pending-actions">
+                        <button class="btn success confirm-btn" onclick="app.confirmTransaction(${transaction.id})"><i class="fa-solid fa-check"></i></button>
+                        <button class="btn danger confirm-btn" onclick="app.cancelTransaction(${transaction.id})"><i class="fa-solid fa-times"></i></button>
+                    </div>
+                    ` : ''}
+                    <button class="delete-btn" onclick="app.viewEditTransaction(${transaction.id})"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                </div>
+            </li>`;
+        };
+
         // --- FORM HANDLING ---
         const setupForms = () => {
-            // Category form
-            document.getElementById('category-form').addEventListener('submit', (e) => {
+            // Transaction Type Selector
+            document.querySelectorAll('.transaction-type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.transaction-type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Recurring Options Toggle
+            document.getElementById('is-recurring').addEventListener('change', function() {
+                document.getElementById('recurring-options').style.display = this.checked ? 'block' : 'none';
+            });
+            
+            document.getElementById('edit-is-recurring').addEventListener('change', function() {
+                document.getElementById('edit-recurring-options').style.display = this.checked ? 'block' : 'none';
+            });
+            
+            // Category Form
+            document.getElementById('category-form').addEventListener('submit', e => {
                 e.preventDefault();
                 const nameInput = document.getElementById('category-name');
-                const name = nameInput.value.trim();
-                if (!name) return;
-                
-                const newId = state.categories.length > 0 ? Math.max(...state.categories.map(c => c.id)) + 1 : 1;
-                state.categories.push({ id: newId, name });
+                const newCategory = { id: Date.now(), name: nameInput.value.trim() };
+                state.categories.push(newCategory);
                 saveState();
                 renderActivePage();
                 nameInput.value = '';
-                updateCategorySelects();
             });
-
-            // Account form
-            document.getElementById('account-form').addEventListener('submit', (e) => {
+            
+            // Account Form
+            document.getElementById('account-form').addEventListener('submit', e => {
                 e.preventDefault();
                 const nameInput = document.getElementById('account-name');
                 const balanceInput = document.getElementById('account-initial-balance');
-                const isCreditCardCheckbox = document.getElementById('is-credit-card');
+                const isCreditCheckbox = document.getElementById('account-is-credit');
                 
-                const name = nameInput.value.trim();
-                const initialBalance = parseFloat(balanceInput.value) || 0;
-                const isCreditCard = isCreditCardCheckbox.checked;
+                const newAccount = {
+                    id: Date.now(),
+                    name: nameInput.value.trim(),
+                    initialBalance: parseFloat(balanceInput.value) || 0,
+                    isCredit: isCreditCheckbox.checked
+                };
                 
-                if (!name) return;
-                
-                const newId = state.accounts.length > 0 ? Math.max(...state.accounts.map(a => a.id)) + 1 : 1;
-                state.accounts.push({ id: newId, name, initialBalance, isCreditCard });
+                state.accounts.push(newAccount);
                 saveState();
                 renderActivePage();
                 nameInput.value = '';
                 balanceInput.value = '0';
-                isCreditCardCheckbox.checked = false;
-                updateAccountSelects();
-            });
-
-            // Transaction form
-            const transactionTypeButtons = document.querySelectorAll('.transaction-type-selector button');
-            const toggleRecurringBtn = document.getElementById('toggle-recurring');
-            const toggleFixedBtn = document.getElementById('toggle-fixed');
-            const recurringOptions = document.getElementById('recurring-options');
-            
-            let currentTransactionType = 'income';
-            let isRecurring = false;
-            let isFixed = false;
-            
-            transactionTypeButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    transactionTypeButtons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentTransactionType = btn.dataset.type;
-                });
+                isCreditCheckbox.checked = false;
             });
             
-            toggleRecurringBtn.addEventListener('click', () => {
-                isRecurring = !isRecurring;
-                toggleRecurringBtn.classList.toggle('active', isRecurring);
-                recurringOptions.style.display = isRecurring ? 'block' : 'none';
-                
-                // Não pode ser recorrente e fixa ao mesmo tempo
-                if (isRecurring && isFixed) {
-                    isFixed = false;
-                    toggleFixedBtn.classList.remove('active');
-                }
-            });
-            
-            toggleFixedBtn.addEventListener('click', () => {
-                isFixed = !isFixed;
-                toggleFixedBtn.classList.toggle('active', isFixed);
-                
-                // Não pode ser recorrente e fixa ao mesmo tempo
-                if (isFixed && isRecurring) {
-                    isRecurring = false;
-                    toggleRecurringBtn.classList.remove('active');
-                    recurringOptions.style.display = 'none';
-                }
-            });
-            
-            document.getElementById('transaction-form').addEventListener('submit', (e) => {
+            // Transaction Form
+            document.getElementById('transaction-form').addEventListener('submit', e => {
                 e.preventDefault();
-                const description = document.getElementById('description').value.trim();
-                const amount = parseFloat(document.getElementById('amount').value);
-                const date = document.getElementById('date').value;
-                const categoryId = parseInt(document.getElementById('category').value);
-                const accountId = parseInt(document.getElementById('account').value);
-                const isPending = document.getElementById('is-pending').checked;
+                const typeBtn = document.querySelector('.transaction-type-btn.active');
+                const isIncome = typeBtn.dataset.type === 'income';
                 
-                if (!description || !amount || !date || !categoryId || !accountId) return;
-                
-                const recurrence = isRecurring ? {
-                    frequency: document.getElementById('recurrence-frequency').value,
-                    endDate: document.getElementById('recurrence-end-date').value || null
-                } : null;
-                
-                const newId = state.transactions.length > 0 ? Math.max(...state.transactions.map(t => t.id)) + 1 : 1;
                 const newTransaction = {
-                    id: newId,
-                    description,
-                    amount,
-                    date,
-                    categoryId,
-                    accountId,
-                    type: currentTransactionType,
-                    status: isPending ? 'pending' : 'completed',
-                    isRecurring,
-                    isFixed,
-                    recurrence
+                    id: Date.now(),
+                    description: document.getElementById('description').value,
+                    amount: isIncome ? 
+                        parseFloat(document.getElementById('amount').value) : 
+                        -parseFloat(document.getElementById('amount').value),
+                    date: document.getElementById('date').value,
+                    categoryId: parseInt(document.getElementById('category').value),
+                    accountId: parseInt(document.getElementById('account').value),
+                    status: document.getElementById('is-pending').checked ? 'pending' : 'completed',
+                    isRecurring: document.getElementById('is-recurring').checked,
+                    recurringFrequency: document.getElementById('is-recurring').checked ? 
+                        document.getElementById('recurring-frequency').value : null
                 };
                 
                 state.transactions.push(newTransaction);
                 saveState();
                 renderActivePage();
-                closeModal('add-modal-overlay');
-                resetTransactionForm();
+                document.getElementById('add-modal-overlay').classList.remove('active');
+                document.getElementById('transaction-form').reset();
             });
-
-            // Edit transaction form
-            document.getElementById('edit-transaction-form').addEventListener('submit', (e) => {
+            
+            // Edit Transaction Form
+            document.getElementById('edit-transaction-form').addEventListener('submit', e => {
                 e.preventDefault();
-                const id = parseInt(document.getElementById('edit-transaction-id').value);
-                const description = document.getElementById('edit-description').value.trim();
-                const amount = parseFloat(document.getElementById('edit-amount').value);
-                const date = document.getElementById('edit-date').value;
-                const categoryId = parseInt(document.getElementById('edit-category').value);
-                const accountId = parseInt(document.getElementById('edit-account').value);
-                const isPending = document.getElementById('edit-is-pending').checked;
+                const transactionId = parseInt(document.getElementById('edit-transaction-id').value);
+                const transaction = state.transactions.find(t => t.id === transactionId);
+                if (!transaction) return;
                 
-                if (!description || !amount || !date || !categoryId || !accountId) return;
+                transaction.description = document.getElementById('edit-description').value;
+                transaction.amount = parseFloat(document.getElementById('edit-amount').value);
+                transaction.date = document.getElementById('edit-date').value;
+                transaction.categoryId = parseInt(document.getElementById('edit-category').value);
+                transaction.accountId = parseInt(document.getElementById('edit-account').value);
+                transaction.status = document.getElementById('edit-is-pending').checked ? 'pending' : 'completed';
+                transaction.isRecurring = document.getElementById('edit-is-recurring').checked;
+                transaction.recurringFrequency = document.getElementById('edit-is-recurring').checked ? 
+                    document.getElementById('edit-recurring-frequency').value : null;
                 
-                const transaction = state.transactions.find(t => t.id === id);
-                if (transaction) {
-                    transaction.description = description;
-                    transaction.amount = amount;
-                    transaction.date = date;
-                    transaction.categoryId = categoryId;
-                    transaction.accountId = accountId;
-                    transaction.status = isPending ? 'pending' : 'completed';
-                    saveState();
-                    renderActivePage();
-                    closeModal('view-edit-modal-overlay');
-                }
+                saveState();
+                renderActivePage();
+                document.getElementById('view-edit-modal-overlay').classList.remove('active');
             });
         };
 
-        const resetTransactionForm = () => {
-            document.getElementById('transaction-form').reset();
-            document.querySelector('.transaction-type-selector button.income').classList.add('active');
-            document.querySelector('.transaction-type-selector button.expense').classList.remove('active');
-            document.getElementById('toggle-recurring').classList.remove('active');
-            document.getElementById('toggle-fixed').classList.remove('active');
-            document.getElementById('recurring-options').style.display = 'none';
-            currentTransactionType = 'income';
-            isRecurring = false;
-            isFixed = false;
-        };
-
-        const updateCategorySelects = () => {
-            const categorySelects = document.querySelectorAll('select[id$="category"]');
-            categorySelects.forEach(select => {
-                select.innerHTML = state.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-            });
-        };
-
-        const updateAccountSelects = () => {
-            const accountSelects = document.querySelectorAll('select[id$="account"]');
-            accountSelects.forEach(select => {
-                select.innerHTML = state.accounts.map(a => `<option value="${a.id}">${a.name}${a.isCreditCard ? ' (Cartão)' : ''}</option>`).join('');
-            });
-        };
-
-        // --- MODAL MANAGEMENT ---
+        // --- MODAL HANDLING ---
         const setupModals = () => {
-            // Add transaction modal
+            // Add Transaction Modal
             document.getElementById('fab-add-btn').addEventListener('click', () => {
-                document.getElementById('date').value = new Date().toISOString().split('T')[0];
-                openModal('add-modal-overlay');
+                document.getElementById('add-modal-overlay').classList.add('active');
+                populateCategoryDropdown('category');
+                populateAccountDropdown('account');
+                document.getElementById('date').valueAsDate = new Date();
             });
             
             document.getElementById('cancel-add-btn').addEventListener('click', () => {
-                closeModal('add-modal-overlay');
-                resetTransactionForm();
+                document.getElementById('add-modal-overlay').classList.remove('active');
             });
-
-            // View/Edit transaction modal
-            document.getElementById('cancel-edit-btn').addEventListener('click', () => closeModal('view-edit-modal-overlay'));
+            
+            // View/Edit Transaction Modal
+            document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+                document.getElementById('view-edit-modal-overlay').classList.remove('active');
+            });
             
             document.getElementById('delete-from-modal-btn').addEventListener('click', () => {
-                const id = parseInt(document.getElementById('edit-transaction-id').value);
-                if (confirm('Tem certeza que deseja excluir esta transação?')) {
-                    removeTransaction(id);
-                    closeModal('view-edit-modal-overlay');
-                }
+                const transactionId = parseInt(document.getElementById('edit-transaction-id').value);
+                app.removeTransaction(transactionId);
+                document.getElementById('view-edit-modal-overlay').classList.remove('active');
             });
-
-            // Close modals when clicking outside
+            
+            // Download Receipt
+            document.getElementById('download-receipt-btn').addEventListener('click', () => {
+                alert('Funcionalidade de download de recibo será implementada em breve!');
+            });
+            
+            // Close modals on overlay click
             document.querySelectorAll('.modal-overlay').forEach(overlay => {
-                overlay.addEventListener('click', (e) => {
-                    if (e.target === overlay) {
-                        closeModal(overlay.id);
-                        if (overlay.id === 'add-modal-overlay') resetTransactionForm();
-                    }
+                overlay.addEventListener('click', e => {
+                    if (e.target === overlay) overlay.classList.remove('active');
                 });
             });
         };
 
-        const openModal = (modalId) => {
-            document.getElementById(modalId).classList.add('active');
+        // --- DROPDOWN POPULATION ---
+        const populateCategoryDropdown = (dropdownId) => {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.innerHTML = state.categories.map(cat => 
+                `<option value="${cat.id}">${cat.name}</option>`
+            ).join('');
+        };
+        
+        const populateAccountDropdown = (dropdownId) => {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.innerHTML = state.accounts.map(acc => 
+                `<option value="${acc.id}">${acc.name} ${acc.isCredit ? '(Cartão)' : ''}</option>`
+            ).join('');
         };
 
-        const closeModal = (modalId) => {
-            document.getElementById(modalId).classList.remove('active');
-        };
-
-        // --- TRANSACTION MANAGEMENT ---
-        const removeTransaction = (id) => {
-            state.transactions = state.transactions.filter(t => t.id !== id);
-            saveState();
-            renderActivePage();
-        };
-
-        const confirmTransaction = (id) => {
-            const transaction = state.transactions.find(t => t.id === id);
-            if (transaction) {
-                transaction.status = 'completed';
-                saveState();
-                renderActivePage();
-            }
-        };
-
-        const editTransaction = (id) => {
-            const transaction = state.transactions.find(t => t.id === id);
-            if (transaction) {
+        // --- APP METHODS ---
+        const app = {
+            removeCategory: (id) => {
+                if (confirm('Tem certeza que deseja excluir esta categoria?')) {
+                    state.categories = state.categories.filter(c => c.id !== id);
+                    saveState();
+                    renderActivePage();
+                }
+            },
+            
+            removeAccount: (id) => {
+                if (confirm('Tem certeza que deseja excluir esta conta?')) {
+                    state.accounts = state.accounts.filter(a => a.id !== id);
+                    saveState();
+                    renderActivePage();
+                }
+            },
+            
+            removeTransaction: (id) => {
+                if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                    state.transactions = state.transactions.filter(t => t.id !== id);
+                    saveState();
+                    renderActivePage();
+                }
+            },
+            
+            confirmTransaction: (id) => {
+                const transaction = state.transactions.find(t => t.id === id);
+                if (transaction) {
+                    transaction.status = 'completed';
+                    saveState();
+                    renderActivePage();
+                }
+            },
+            
+            cancelTransaction: (id) => {
+                app.removeTransaction(id);
+            },
+            
+            viewEditTransaction: (id) => {
+                const transaction = state.transactions.find(t => t.id === id);
+                if (!transaction) return;
+                
                 document.getElementById('edit-transaction-id').value = transaction.id;
                 document.getElementById('edit-description').value = transaction.description;
-                document.getElementById('edit-amount').value = transaction.amount;
+                document.getElementById('edit-amount').value = Math.abs(transaction.amount);
                 document.getElementById('edit-date').value = transaction.date;
+                
+                // Set transaction type
+                const isIncome = transaction.amount > 0;
+                document.querySelectorAll('.transaction-type-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`.transaction-type-btn.${isIncome ? 'income' : 'expense'}`).classList.add('active');
+                
+                // Populate dropdowns
+                populateCategoryDropdown('edit-category');
+                populateAccountDropdown('edit-account');
+                
                 document.getElementById('edit-category').value = transaction.categoryId;
                 document.getElementById('edit-account').value = transaction.accountId;
                 document.getElementById('edit-is-pending').checked = transaction.status === 'pending';
-                openModal('view-edit-modal-overlay');
+                document.getElementById('edit-is-recurring').checked = transaction.isRecurring;
+                document.getElementById('edit-recurring-options').style.display = transaction.isRecurring ? 'block' : 'none';
+                if (transaction.isRecurring) {
+                    document.getElementById('edit-recurring-frequency').value = transaction.recurringFrequency;
+                }
+                
+                document.getElementById('view-edit-modal-overlay').classList.add('active');
             }
         };
 
-        const removeCategory = (id) => {
-            if (state.transactions.some(t => t.categoryId === id)) {
-                alert('Não é possível excluir uma categoria que está sendo usada em transações.');
-                return;
-            }
-            state.categories = state.categories.filter(c => c.id !== id);
-            saveState();
-            renderActivePage();
-            updateCategorySelects();
-        };
-
-        const removeAccount = (id) => {
-            if (state.transactions.some(t => t.accountId === id)) {
-                alert('Não é possível excluir uma conta que possui transações.');
-                return;
-            }
-            state.accounts = state.accounts.filter(a => a.id !== id);
-            saveState();
-            renderActivePage();
-            updateAccountSelects();
-        };
-
-        // --- EVENT LISTENERS ---
-        const setupEventListeners = () => {
+        // --- INITIALIZATION ---
+        const init = () => {
+            initializeData();
+            
             // Navigation
-            selectors.navLinks.addEventListener('click', (e) => {
+            selectors.navLinks.addEventListener('click', e => {
                 const link = e.target.closest('a[data-page]');
-                if (link) navigateTo(link.dataset.page);
+                if (link) {
+                    e.preventDefault();
+                    navigateTo(link.dataset.page);
+                }
             });
-
+            
             // Mobile menu
             selectors.menuToggleBtn.addEventListener('click', () => {
                 selectors.sidebar.classList.toggle('open');
@@ -916,33 +851,28 @@
                 selectors.sidebar.classList.remove('open');
                 selectors.sidebarOverlay.classList.remove('active');
             });
-
-            // Reports filters
-            document.getElementById('start-date').addEventListener('change', () => renderReports());
-            document.getElementById('end-date').addEventListener('change', () => renderReports());
-
-            // Transaction list item click for viewing/editing
-            document.addEventListener('click', (e) => {
-                const listItem = e.target.closest('.list-item[data-id]');
-                if (listItem && !e.target.closest('.delete-btn') && !e.target.closest('.confirm-btn')) {
-                    const id = parseInt(listItem.dataset.id);
-                    editTransaction(id);
-                }
+            
+            // Report filters
+            document.getElementById('start-date').addEventListener('change', () => {
+                if (state.activePage === 'reports-page') renderReports();
             });
-        };
-
-        // --- INITIALIZATION ---
-        const init = () => {
-            initializeData();
-            setupEventListeners();
+            
+            document.getElementById('end-date').addEventListener('change', () => {
+                if (state.activePage === 'reports-page') renderReports();
+            });
+            
+            // Set default dates for reports
+            const now = new Date();
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            document.getElementById('start-date').valueAsDate = firstDay;
+            document.getElementById('end-date').valueAsDate = now;
+            
             setupForms();
             setupModals();
-            updateCategorySelects();
-            updateAccountSelects();
             navigateTo(state.activePage);
             
-            // Expose methods globally for onclick handlers
-            window.app = { removeTransaction, confirmTransaction, removeCategory, removeAccount };
+            // Make app methods globally available
+            window.app = app;
         };
 
         init();
